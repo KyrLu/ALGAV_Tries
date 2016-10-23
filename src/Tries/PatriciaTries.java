@@ -29,6 +29,10 @@ public class PatriciaTries {
 		return false;
 	}
 	
+	public boolean isPrefix(String word) {
+		return subWord.startsWith(subWord);
+	}
+	
 	public boolean lastTrie() {
 		return subWord.endsWith("" + finalChar);
 	}
