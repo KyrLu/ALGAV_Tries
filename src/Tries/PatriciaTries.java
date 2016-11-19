@@ -25,15 +25,23 @@ public class PatriciaTries implements Trie {
 		return subWord.endsWith("" + finalChar);
 	}
 	
-	public PatriciaTries ajouterMot(String word) {		// TODO
-		return null;
+	public PatriciaTries ajouterMot(String word) {	// TODO
+		if (word.isEmpty() || subWord.isEmpty()) // Pas fini, debut peut-etre mauvais
+			subWord = "" + finalChar;
+		else {
+			if (tries[(int)word.charAt(0)] == null)
+				subWord = word + finalChar;
+			else
+				tries[(int)word.charAt(0)].ajouterMot(word);
+		}
+		return this;
 	}
 	
 	public PatriciaTries suppression(String word) {	// TODO
-		return null;
+		return this;
 	}
 	
-	public boolean recherche(String word) {				// TODO
+	public boolean recherche(String word) {			// TODO
 		return false;
 	}
 
