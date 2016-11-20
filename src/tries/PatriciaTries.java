@@ -63,16 +63,44 @@ public class PatriciaTries implements Trie {
 		return 0;
 	}
 
+	//XXX Pas encore testé.
 	@Override
 	public int hauteur() {
-		// TODO Auto-generated method stub
-		return 0;
+		return nextLevel(0);
 	}
 
+	
+	protected int nextLevel(int level) {
+		int result = level;
+		
+		for (PatriciaTries t : tries) {
+			if (t != null)
+				result = Math.max(result, nextLevel(level+1));
+		}
+		
+		return result;
+	}
+
+	//XXX Pas encore testé.
 	@Override
-	public int profondeurMoyenne() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double profondeurMoyenne() {
+		return nextLevelMean(0);
+	}
+	
+	protected double nextLevelMean(int level) {
+		double result = 0;
+		double nonNull = 0;
+		
+		for (PatriciaTries t : tries) {
+			if (t != null)
+				result += nextLevelMean(level+1);
+		}
+		
+		//Evite une division par 0.
+		if (nonNull == 0)
+			return 0;
+		
+		return result/nonNull;
 	}
 
 	@Override

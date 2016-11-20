@@ -32,7 +32,7 @@ public class TriesHybrides implements Trie {
 	}
 
 	/*
-	 * Pour garder la possibilité de mettre une valeur
+	 * Pour garder la possibilitï¿½ de mettre une valeur
 	 * La fonction de l'interface utilise cette fonction : ajouterMot(mot, id)
 	 * 
 	 * TODO : optimisation possible : creer les TriesHybrides fils quand
@@ -187,16 +187,56 @@ public class TriesHybrides implements Trie {
 
 	@Override
 	public int hauteur() {
-		// TODO Auto-generated method stub
-		return 0;
+		return nextLevel(0);
 	}
 
+	/**
+	 * Methode propagÃ©e dans l'arbre afin de connaitre sa taille.
+	 */
+	protected int nextLevel(int level) {
+		int result = level;
+		
+		//Utiliser une methode tierce pour limiter le duplication de code n'a pour effet que d'alourdir une methode simple.
+		if (inf != null)
+			result = Math.max(result, inf.nextLevel(level+1));
+		if (eq != null)
+			result = Math.max(result, eq.nextLevel(level+1));
+		if (sup != null)
+			result = Math.max(result, sup.nextLevel(level+1));
+		
+		return result;
+	}
+	
 	@Override
-	public int profondeurMoyenne() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double profondeurMoyenne() {
+		return nextLevelMean(0);
 	}
-
+	
+	protected double nextLevelMean(int level) {
+		double result = 0;
+		double nonNull = 0;
+		
+		if (inf != null) {
+			result += inf.nextLevelMean(level+1);
+			nonNull++;
+		}
+		if (eq != null) {
+			result += eq.nextLevel(level+1);
+			nonNull++;
+		}
+		if (sup != null) {
+			result += sup.nextLevel(level+1);
+			nonNull++;
+		}
+		
+		//Evite une division par 0.
+		if (nonNull == 0)
+			return 0;
+		
+		return result/nonNull;
+	}
+	
+	//XXX cette methode est-elle vraiment utile pour ce trie ?
 	@Override
 	public int prefixe(String mot) {
 		// TODO Auto-generated method stub

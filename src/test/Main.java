@@ -20,7 +20,7 @@ public class Main {
 		
 		Trie hybride = new TriesHybrides();
 		hybride = (TriesHybrides) ajoutPhrase(hybride, exempleDeBase);
-		System.out.println(hybride);
+//		System.out.println(hybride);
 		System.out.println("Contient professeur : " + hybride.recherche("professeur"));
 		System.out.println("Contient dactylographie : " + hybride.recherche("dactylographie"));
 		System.out.println("Contient dactylo : " + hybride.recherche("dactylo"));
@@ -32,11 +32,14 @@ public class Main {
 		System.out.println("Ne contient pas ecureuil : " + ! hybride.recherche("ecureuil"));
 		
 		hybride.suppression("dactylo");
-		System.out.println(hybride);
+//		System.out.println(hybride);
 		System.out.println("Suppression dactylo : " + ! hybride.recherche("dactylo"));
 		System.out.println("Contient toujours dactylographie : " + hybride.recherche("dactylographie"));
 		
 		System.out.println(hybride.comptageMot());
+		
+		System.out.println("Hauteur : " + hybride.hauteur());
+		System.out.println("Hauteur moyenne : " + hybride.profondeurMoyenne());
 		
 //		hybride.ajouterMot("ecrire");
 //		hybride.ajouterMot("appeler");
