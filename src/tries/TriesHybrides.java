@@ -280,4 +280,24 @@ public class TriesHybrides implements Trie {
 	public boolean estVide() {
 		return caractere == 0;
 	}
+	
+	public char getCaractere() {
+		return caractere;
+	}
+	
+	public TriesHybrides getInf() {
+		return inf;
+	}
+	
+	public TriesHybrides getEq() {
+		return eq;
+	}
+	
+	public TriesHybrides getSup() {
+		return sup;
+	}
+	
+	public Integer getValeur() {
+		return valeur;
+	}
 }
