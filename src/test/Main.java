@@ -47,6 +47,8 @@ public class Main {
 		
 		TriesVisualisation.displayTrie(hybride);
 		
+		System.out.println(hybride.prefixe("de"));
+		
 //		hybride.ajouterMot("ecrire");
 //		hybride.ajouterMot("appeler");
 //		hybride.ajouterMot("tester");

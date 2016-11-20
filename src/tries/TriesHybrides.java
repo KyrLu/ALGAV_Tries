@@ -254,12 +254,13 @@ public class TriesHybrides implements Trie {
 	
 	//XXX cette methode est-elle vraiment utile pour ce trie ?
 	//C'est dans la question 2.6, faut la faire (pas la plus utile, c'est sur)
+	// Bon, c'est complétement naze, je changerai ça plus tard.
 	@Override
 	public int prefixe(String mot) {
 		int nb = 0;
 		if (valeur != null)
 			nb = 1;
-		if (eq != null)
+		if (eq != null && mot.length() > 1)
 			return eq.prefixe(mot.substring(1)) + nb;
 		else
 			return nb;
