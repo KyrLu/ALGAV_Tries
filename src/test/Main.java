@@ -38,8 +38,14 @@ public class Main {
 		
 		System.out.println(hybride.comptageMot());
 		
+
 		for (String mot : hybride.listeMots())
 			System.out.println(mot);
+
+		System.out.println("Hauteur : " + hybride.hauteur());
+		System.out.println("Hauteur moyenne : " + hybride.profondeurMoyenne());
+		
+		TriesVisualisation.displayTrie(hybride);
 		
 //		hybride.ajouterMot("ecrire");
 //		hybride.ajouterMot("appeler");

@@ -8,6 +8,6 @@ public interface Trie {
 	public String[] listeMots();
 	public int comptageNil();
 	public int hauteur();
-	public int profondeurMoyenne();
+	public double profondeurMoyenne();
 	public int prefixe(String mot);
 }
