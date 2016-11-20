@@ -253,10 +253,16 @@ public class TriesHybrides implements Trie {
 	}
 	
 	//XXX cette methode est-elle vraiment utile pour ce trie ?
+	//C'est dans la question 2.6, faut la faire (pas la plus utile, c'est sur)
 	@Override
 	public int prefixe(String mot) {
-		// TODO Auto-generated method stub
-		return 0;
+		int nb = 0;
+		if (valeur != null)
+			nb = 1;
+		if (eq != null)
+			return eq.prefixe(mot.substring(1)) + nb;
+		else
+			return nb;
 	}
 	
 	@Override

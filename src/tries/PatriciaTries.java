@@ -81,7 +81,7 @@ public class PatriciaTries implements Trie {
 		return result;
 	}
 
-	//XXX Pas encore testé.
+	//XXX Pas encore teste.
 	@Override
 	public double profondeurMoyenne() {
 		return nextLevelMean(0);
