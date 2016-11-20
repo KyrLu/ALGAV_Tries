@@ -37,6 +37,8 @@ public class TriesHybrides implements Trie {
 	 * 
 	 * TODO : optimisation possible : creer les TriesHybrides fils quand
 	 * le pere n'est pas vide pour ne pas verifier si les fils sont null
+	 * Ou alors faire une fonction static ?
+	 * (plus proche de l'algo du cours)
 	 */
 	public Trie ajouterMot(String mot, int valeur) {
 		if (this.estVide()) {
@@ -68,18 +70,61 @@ public class TriesHybrides implements Trie {
 					eq.ajouterMot(mot.substring(1), valeur);
 			}
 			else {
-				this.valeur = valeur;
+				if (this.valeur == null)
+					this.valeur = valeur;
+				else
+					id--; // mot pas ajoute ; une maniere + elegante ?
 			}
-//			else
-//				id--; // mot pas ajoute ; une maniere + elegante ?
 		}
 		return this;
 	}
 
 	@Override
 	public Trie suppression(String mot) {
-		// TODO Auto-generated method stub
-		return null;
+		char initiale = mot.charAt(0);
+		if (initiale ==  caractere) {
+			if (mot.length() == 1) {
+				if (inf == null && eq == null && sup == null)
+					return null;
+				else {
+					valeur = null;
+					return this;
+				}
+			}
+			else {
+				if (eq == null)
+					return this;
+				else {
+					eq = (TriesHybrides) eq.suppression(mot.substring(1));
+					if (eq == null && sup == null && inf == null)
+						return null;
+					else
+						return this;
+				}
+			}
+		}
+		else if (initiale < caractere) {
+			if (inf == null)
+				return this;
+			else {
+				inf = (TriesHybrides) inf.suppression(mot);
+				if (inf == null && eq == null && sup == null)
+					return null;
+				else
+					return this;
+			}
+		}
+		else {
+			if (sup == null)
+				return this;
+			else {
+				sup = (TriesHybrides) sup.suppression(mot);
+				if (sup == null && eq == null && inf == null)
+					return null;
+				else
+					return this;
+			}
+		}
 	}
 
 	@Override
@@ -112,8 +157,14 @@ public class TriesHybrides implements Trie {
 
 	@Override
 	public int comptageMot() {
-		// TODO Auto-generated method stub
-		return 0;
+		int count = valeur != null ? 1 : 0;
+		if (inf != null)
+			count += inf.comptageMot();
+		if (eq != null)
+			count += eq.comptageMot();
+		if (sup != null)
+			count += sup.comptageMot();
+		return count;
 	}
 
 	@Override
@@ -124,8 +175,14 @@ public class TriesHybrides implements Trie {
 
 	@Override
 	public int comptageNil() {
-		// TODO Auto-generated method stub
-		return 0;
+		int count = valeur == null ? 1 : 0;
+		if (inf != null)
+			count += inf.comptageNil();
+		if (eq != null)
+			count += eq.comptageNil();
+		if (sup != null)
+			count += sup.comptageNil();
+		return count;
 	}
 
 	@Override

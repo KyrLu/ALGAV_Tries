@@ -31,6 +31,13 @@ public class Main {
 		System.out.println("Ne contient pas touche : " + ! hybride.recherche("touche"));
 		System.out.println("Ne contient pas ecureuil : " + ! hybride.recherche("ecureuil"));
 		
+		hybride.suppression("dactylo");
+		System.out.println(hybride);
+		System.out.println("Suppression dactylo : " + ! hybride.recherche("dactylo"));
+		System.out.println("Contient toujours dactylographie : " + hybride.recherche("dactylographie"));
+		
+		System.out.println(hybride.comptageMot());
+		
 //		hybride.ajouterMot("ecrire");
 //		hybride.ajouterMot("appeler");
 //		hybride.ajouterMot("tester");
