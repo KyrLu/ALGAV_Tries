@@ -1,5 +1,7 @@
 package tries;
 
+import java.util.ArrayList;
+
 public class TriesHybrides implements Trie {
 	
 	private char caractere;
@@ -169,8 +171,22 @@ public class TriesHybrides implements Trie {
 
 	@Override
 	public String[] listeMots() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<String> liste = new ArrayList<String>();
+		if (inf != null)
+			for (String mot : inf.listeMots())
+				liste.add(mot);
+
+		if (valeur != null)
+			liste.add("" + caractere);
+		
+		if (eq != null)
+			for (String mot : eq.listeMots())
+				liste.add(caractere + mot);
+		
+		if (sup != null)
+			for (String mot : sup.listeMots())
+				liste.add(mot);
+		return (String[]) liste.toArray(new String[liste.size()]);
 	}
 
 	@Override

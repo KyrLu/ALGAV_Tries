@@ -38,6 +38,9 @@ public class Main {
 		
 		System.out.println(hybride.comptageMot());
 		
+		for (String mot : hybride.listeMots())
+			System.out.println(mot);
+		
 //		hybride.ajouterMot("ecrire");
 //		hybride.ajouterMot("appeler");
 //		hybride.ajouterMot("tester");
