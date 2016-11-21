@@ -45,9 +45,10 @@ public class Main {
 		System.out.println("Hauteur : " + hybride.hauteur());
 		System.out.println("Hauteur moyenne : " + hybride.profondeurMoyenne());
 		
+		System.out.println(hybride.prefixe("de"));
+		
 		TriesVisualisation.displayTrie(hybride);
 		
-		System.out.println(hybride.prefixe("de"));
 		
 //		hybride.ajouterMot("ecrire");
 //		hybride.ajouterMot("appeler");

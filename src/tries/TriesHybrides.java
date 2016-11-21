@@ -254,16 +254,33 @@ public class TriesHybrides implements Trie {
 	
 	//XXX cette methode est-elle vraiment utile pour ce trie ?
 	//C'est dans la question 2.6, faut la faire (pas la plus utile, c'est sur)
-	// Bon, c'est complétement naze, je changerai ça plus tard.
 	@Override
 	public int prefixe(String mot) {
-		int nb = 0;
-		if (valeur != null)
-			nb = 1;
-		if (eq != null && mot.length() > 1)
-			return eq.prefixe(mot.substring(1)) + nb;
-		else
-			return nb;
+		char initiale = mot.charAt(0);
+		System.out.println("mot : " + mot + " ; caractere : " + caractere);
+		if (initiale == caractere) {
+			
+			if (mot.length() == 1) {
+				int nb = 0;
+				if (valeur != null)
+					nb = 1;
+				if (eq != null)
+					return eq.comptageMot() + nb;
+				else
+					return nb;
+			}
+			else if (eq != null)
+				return eq.prefixe(mot.substring(1));
+		}
+		else {
+			if (initiale < caractere) {
+				if (inf != null)
+					return inf.prefixe(mot);
+			}
+			else if (sup != null)
+				return sup.prefixe(mot);
+		}
+		return 0;
 	}
 	
 	@Override
