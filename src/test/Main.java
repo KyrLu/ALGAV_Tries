@@ -10,18 +10,17 @@ public class Main {
 			+ "la superbe phrase ci dessous, un modele du genre, que toute dactylo connait par coeur puisque"
 			+ " elle fait appel a chacune des touches du clavier de la machine a ecrire";
 	
+	public final static String test1 = "test tete tester table autre";
+	
 	public static void main(String[] args) {
 //		testHybride();
 		testPatricia();
 	}
 	
 	public static void testHybride() {
-//		TriesHybrides hybride = new TriesHybrides(' ', 0);
-//		hybride = (TriesHybrides) ajoutPhrase(hybride, exempleDeBase);
-		
-		
 		Trie hybride = new TriesHybrides();
 		hybride = (TriesHybrides) ajoutPhrase(hybride, exempleDeBase);
+
 		System.out.println(hybride);
 		System.out.println("Contient professeur : " + hybride.recherche("professeur"));
 		System.out.println("Contient dactylographie : " + hybride.recherche("dactylographie"));
@@ -66,12 +65,15 @@ public class Main {
 	
 	public static void testPatricia() {
 		PatriciaTries patricia = new PatriciaTries("");
-		patricia = (PatriciaTries) ajoutPhrase(patricia, exempleDeBase);
-	
+//		patricia = (PatriciaTries) ajoutPhrase(patricia, exempleDeBase);
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
+		
 		System.out.println(patricia);
 		System.out.println("Hauteur : " + patricia.hauteur());
 		System.out.println("profondeur moyenne : " + patricia.profondeurMoyenne());
-		TriesVisualisation.displayTrie(patricia);
+		System.out.println("Nombre de mots : " + patricia.comptageMot() + " doit être de ");
+		
+//		TriesVisualisation.displayTrie(patricia);
 	
 	}
 	

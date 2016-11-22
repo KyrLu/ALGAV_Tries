@@ -128,8 +128,16 @@ public class PatriciaTries implements Trie {
 
 	@Override
 	public int comptageMot() {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		
+		if (subWord.contains(finalChar+""))
+			result++;
+		
+		for (PatriciaTries pt : tries) {
+			result += pt.comptageMot(); 
+		}
+		
+		return result;
 	}
 
 	@Override
@@ -152,8 +160,6 @@ public class PatriciaTries implements Trie {
 
 	protected int nextLevel(int level) {
 		int result = level;
-
-		System.out.println("current level : " + level);
 
 		if (tries.size() == 0)
 			return result;
@@ -209,18 +215,33 @@ public class PatriciaTries implements Trie {
 		this.tries = tries;
 	}
 
-	@Override
-	public String toString() {
+	
+	private String getTabs(int nb) {
 		String result = "";
-
-		result += "(" + subWord + ")";
-		result += "{";
+		
+		for (int i = 0; i < nb; i++)
+			result += "\t";
+		
+		return result;
+	}
+	
+	private String toString(int level) {
+		String result = "";
+		String tabs = getTabs(level);
+		
+		result +=  tabs + "(" + subWord + ")";
+		result += "{\n";
 
 		for (PatriciaTries pt : tries) {
-			result += pt.toString();
+			result += pt.toString(level+1);
 		}
-		result +="}";
+		result +="\n" + tabs +"} \n";
 
 		return result;
+	}
+	
+	@Override
+	public String toString() {
+		return toString(0);
 	}
 }

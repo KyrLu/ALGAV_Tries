@@ -70,6 +70,8 @@ public class TriesVisualisation {
 			nodeSum += t.getSubWord()+":";
 		}
 		
+		System.out.println("label : " + nodeSum);
+		
 		n = g.addNode(nextId()+"");
 		setLabel(n, nodeSum);
 		
