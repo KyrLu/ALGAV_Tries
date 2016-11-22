@@ -11,9 +11,11 @@ public class Main {
 			+ " elle fait appel a chacune des touches du clavier de la machine a ecrire";
 	
 	public static void main(String[] args) {
-//		PatriciaTries patricia = new PatriciaTries("");
-//		patricia = (PatriciaTries) ajoutPhrase(patricia, exempleDeBase);
-//		
+//		testHybride();
+		testPatricia();
+	}
+	
+	public static void testHybride() {
 //		TriesHybrides hybride = new TriesHybrides(' ', 0);
 //		hybride = (TriesHybrides) ajoutPhrase(hybride, exempleDeBase);
 		
@@ -58,6 +60,19 @@ public class Main {
 //		System.out.println(hybride);
 //		hybride.ajouterMot("testeurs");
 //		System.out.println(hybride);
+	
+	}
+	
+	
+	public static void testPatricia() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, exempleDeBase);
+	
+		System.out.println(patricia);
+		System.out.println("Hauteur : " + patricia.hauteur());
+		System.out.println("profondeur moyenne : " + patricia.profondeurMoyenne());
+		TriesVisualisation.displayTrie(patricia);
+	
 	}
 	
 	public static Trie ajoutPhrase(Trie arbre, String phrase) {
