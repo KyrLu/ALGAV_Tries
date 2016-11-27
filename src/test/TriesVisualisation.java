@@ -62,7 +62,7 @@ public class TriesVisualisation {
 		g.display();
 	}
 	
-	private static Node buildPatricia(PatriciaTries pt, Graph g) {
+	private static Node buildPatricia(PatriciaTries pt, Graph g) { //TODO Fix me!
 		Node n;
 		String nodeSum = ":";
 		

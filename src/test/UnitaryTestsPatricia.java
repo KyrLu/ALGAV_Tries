@@ -18,10 +18,9 @@ public class UnitaryTestsPatricia {
 	public final static String test2 = "test tete tester";
 	public final static String test3 = "test tete tester table";
 	public final static String test4 = "test tester test table test testation testationner";
-
+	public final static String test5 = "tester tete";
 	
-	//TODO ajouter deux fois le meme mot.
-	
+	/*INSERTION*/
 	@Test
 	public void testInsert1() {
 		PatriciaTries patricia = new PatriciaTries("");
@@ -47,6 +46,14 @@ public class UnitaryTestsPatricia {
 	}
 	
 	@Test
+	public void testInsert4() {
+		PatriciaTries patricia = new PatriciaTries("");
+		
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test4);
+		assertTrue(contains(toArrayList(test4.split(" ")), toArrayList(patricia.listeMots())));
+	}
+
+	@Test
 	public void testInsertBase() {
 		PatriciaTries patricia = new PatriciaTries("");
 
@@ -54,13 +61,103 @@ public class UnitaryTestsPatricia {
 		assertTrue(contains(toArrayList(exempleDeBase.split("[ ,]")), toArrayList(patricia.listeMots())));
 	}
 	
-
+	
+	
+	/*RECHERCHE*/
 	@Test
-	public void testInsert4() {
+	public void testRecherche1() {
 		PatriciaTries patricia = new PatriciaTries("");
-
-		patricia = (PatriciaTries) ajoutPhrase(patricia, test4);
-		assertTrue(contains(toArrayList(test4.split(" ")), toArrayList(patricia.listeMots())));
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
+		
+		assertTrue(patricia.recherche("test"));
+	}
+	
+	@Test
+	public void testRecherche2() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
+		assertFalse(patricia.recherche("testationner"));
+	}
+	
+	@Test
+	public void testRecherche3() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
+		assertFalse(patricia.recherche("t"));
+	}
+	
+	@Test
+	public void testRecherche4() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
+		assertFalse(patricia.recherche("est"));
+	}
+	
+	@Test
+	public void testRecherche5() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test5);
+		assertFalse(patricia.recherche("test"));
+	}
+	
+	
+	
+	/*PREFIXE*/
+	@Test
+	public void testPrefixe1() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
+		assertEquals(0, patricia.prefixe("b"));
+	}
+	
+	@Test
+	public void testPrefixe2() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
+		assertEquals(4, patricia.prefixe("test"));
+	}
+	
+	@Test
+	public void testPrefixe3() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
+		assertEquals(4, patricia.prefixe("tes"));
+	}
+	
+	
+	/*SUPPRESSION*/
+	@Test
+	public void testSuppr1() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
+		patricia.suppression("test");
+		assertFalse(patricia.recherche("test"));
+	}
+	
+	@Test
+	public void testSuppr2() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test2);
+		patricia.suppression("test");
+		assertFalse(patricia.recherche("test"));
+	}
+	
+	@Test
+	public void testSuppr3() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test2);
+		System.out.println(patricia);
+		patricia.suppression("te");
+		System.out.println(patricia);
+		assertEquals(3, patricia.comptageMot());
+	}
+	
+	@Test
+	public void testSuppr4() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test2);
+		patricia.suppression("st");
+		assertEquals(3, patricia.comptageMot());
 	}
 	
 	public static boolean contains(ArrayList<String> array1, ArrayList<String> array2) {
@@ -87,9 +184,7 @@ public class UnitaryTestsPatricia {
 		String[] mots = phrase.split("[ ,]"); //rajouter virgule dans les mots ?
 		for (String mot : mots) {
 			if (! mot.isEmpty()) {
-				System.out.println(mot);
 				arbre.ajouterMot(mot);
-				System.out.println(arbre);
 			}
 		}
 		return arbre;

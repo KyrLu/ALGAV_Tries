@@ -20,8 +20,8 @@ public class Main {
 	public final static String test4 = "test tester test table test testation testationner";
 	
 	public static void main(String[] args) {
-		testHybride();
-//		testPatricia();
+//		testHybride();
+		testPatricia();
 	}
 	
 	public static void testHybride() {
@@ -86,20 +86,8 @@ public class Main {
 		System.out.println("Nombre de mots : " + patricia.comptageMot());
 		afficherListMots(patricia.listeMots());
 
-		TreeSet<String> listeMots = new TreeSet<String>();
-		
-		for (String s : listeMots) {
-			System.out.print(s + " ");
-		}
-		System.out.println();
-		
-		System.out.println("Nombre de mots pour exemple de base : " + listeMots.size());
-		
-		System.out.println("Missing words :");
-		System.out.println();
-		
-		
-//		TriesVisualisation.displayTrie(patricia);
+		System.out.println("Nils : " + patricia.comptageNil());
+		TriesVisualisation.displayTrie(patricia);
 	
 	}
 	

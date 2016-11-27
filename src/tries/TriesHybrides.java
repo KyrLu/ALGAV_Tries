@@ -252,8 +252,6 @@ public class TriesHybrides implements Trie {
 		return result/nonNull;
 	}
 	
-	//XXX cette methode est-elle vraiment utile pour ce trie ?
-	//C'est dans la question 2.6, faut la faire (pas la plus utile, c'est sur)
 	@Override
 	public int prefixe(String mot) {
 		char initiale = mot.charAt(0);
