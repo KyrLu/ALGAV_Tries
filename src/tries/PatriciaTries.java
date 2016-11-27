@@ -4,40 +4,33 @@ import java.util.ArrayList;
 
 public class PatriciaTries implements Trie {
 
-	private final char finalChar = 3;	// le caractere ETX (end of text) indique, quand present a la fin d'un subWord, la fin d'un mot.
+//	private final char finalChar = 3;	// le caractere ETX (end of text) indique, quand present a la fin d'un subWord, la fin d'un mot.
 	// Utiliser NUL (finalChar = 0) ?
 	private final int sizeTrie = 256;	// 255 caractere ASCII (+ ETX, when a word end)
 	private String subWord;				// subWord de ce PATRICIATries. Si il finit par ETX, fin du mot (et le tries devrait etre vide)
 	private ArrayList<PatriciaTries> tries;		// liste des sous-arbres. Taille de 256 (255 caractere + ETX)
-
+	private boolean isFinal;
+	
 	public PatriciaTries(String subWord, ArrayList<PatriciaTries> tries) {
 		this.subWord = subWord;
 		this.tries = tries;
+		isFinal = false;
 	}
 
 	public PatriciaTries(String subWord) {
 		this(subWord, new ArrayList<>());
+	}
+	
+	public PatriciaTries() {
+		this("", new ArrayList<>());
 	}
 
 	public boolean isPrefix(String word) {
 		return subWord.startsWith(subWord);
 	}
 
-	public boolean lastTrie() {
-		return subWord.endsWith("" + finalChar);
-	}
 
 	public PatriciaTries ajouterMot(String word) {	// TODO Cette version ajoute tout les mots. Mais les mots sont-ils bien mis ? Mystère.
-		//		if (word.isEmpty() || subWord.isEmpty()) // Pas fini, debut peut-etre mauvais
-		//			subWord = "" + finalChar;
-		//		else {
-		//			if (tries[(int)word.charAt(0)] == null)
-		//				subWord = word + finalChar;
-		//			else
-		//				tries[(int)word.charAt(0)].ajouterMot(word);
-		//		}
-		//		return this;
-
 		System.out.println("current word : " + word);
 
 		PatriciaTries candidate = null;
@@ -52,40 +45,80 @@ public class PatriciaTries implements Trie {
 		}
 
 		if (candidate == null) { //Pas de prefix parmis tout les candidats
-			PatriciaTries pt = new PatriciaTries(addFinalChar(word));
+			PatriciaTries pt = new PatriciaTries(word);
+			pt.setFinal();
 			tries.add(pt);
 
 			return pt;
 		}
 
 		//TODO Optimisation plus que douteuse, à modifier.
-		int candidateLength = lengthWFC(candidate.getSubWord());
-		int wordLength = lengthWFC(word); 
-		int commonPrefixLength = lengthWFC(commonPrefix);
+		int candidateLength = candidate.getSubWord().length();
+		int wordLength = word.length(); 
+		int commonPrefixLength = commonPrefix.length();
+		
+		
+		System.out.println("common : " + commonPrefix);
+		System.out.println("candidate : " + candidate.subWord);
 
-
-		if (commonPrefixLength == wordLength) { //Mot deja present
-			candidate.setAsFinal();
-		} else if (commonPrefixLength < candidateLength && commonPrefixLength < wordLength) { //éclatement, si on insere tete dans test -> te[te, st]
-			PatriciaTries newPt = new PatriciaTries(commonPrefix, candidate.tries);
+		if (commonPrefixLength == wordLength && commonPrefixLength < candidateLength) { //Simple extension d'un mot. testFIN -> test[erFIN, FIN]
+			System.out.println("Cas #1");
+			PatriciaTries newPt = new PatriciaTries(commonPrefix);
+			candidate.subWord = candidate.subWord.substring(commonPrefixLength);
+			this.tries.remove(candidate);
+			this.tries.add(newPt);
+			newPt.tries.add(candidate);
+			newPt.tries.add(getEmptyFinal());
+			
+			
+			
+		} else if (commonPrefixLength < candidateLength 
+				&& commonPrefixLength < wordLength) { //éclatement, si on insere tete dans testFIN -> te[teFIN, stFIN]
+			System.out.println("Cas #2");
+			
+			PatriciaTries newPt = new PatriciaTries(commonPrefix);
+			PatriciaTries oldPt = new PatriciaTries(candidate.subWord.substring(commonPrefixLength));
+			
+			if (candidate.isFinal) {
+				candidate.isFinal = false;
+				oldPt.isFinal = true;
+			}
+			
+			oldPt.tries.addAll(candidate.tries);
+			
 			tries.remove(candidate);
 			tries.add(newPt);
-			newPt.ajouterMot(candidate.subWord.substring(commonPrefixLength));
+			newPt.tries.add(oldPt);
 			newPt.ajouterMot(word.substring(commonPrefixLength));
-		} else if (commonPrefixLength < wordLength && commonPrefixLength == candidateLength) {
+			
+		} else if (commonPrefixLength < wordLength 
+				&& commonPrefixLength == candidateLength) { 
+			System.out.println("Cas #3");
+			System.out.println("adding : " + word.substring(commonPrefixLength));
 			candidate.ajouterMot(word.substring(commonPrefixLength));
+			if (candidate.isFinal && candidate.tries.size() != 0) {
+				candidate.isFinal = false;
+				candidate.tries.add(getEmptyFinal());
+			}
 		}
+		
 
-		return this;//XXX ligne tmp
+		return this;
+	}
+	
+	private PatriciaTries getEmptyFinal() {
+		PatriciaTries result = new PatriciaTries();
+		result.setFinal();
+		return result;
 	}
 
 	//Va exclure un potentiel finalChar.
 	private String getPrefixInCommon(String word) {
 		String result = "";
-		int size = Math.min(lengthWFC(subWord), lengthWFC(word));
+		int size = Math.min(subWord.length(), word.length());
 
 		for (int i = 0; i < size; i++) {
-			if (subWord.charAt(i) == word.charAt(i) && subWord.charAt(i) != finalChar)
+			if (subWord.charAt(i) == word.charAt(i))
 				result += subWord.charAt(i);
 			else return result;
 		}
@@ -93,30 +126,6 @@ public class PatriciaTries implements Trie {
 		return result;
 	}
 
-	private String addFinalChar(String w) {
-		if (w.length() == 0 || w.charAt(w.length()-1) == finalChar)
-			return w;
-		else
-			return w + finalChar;
-	}
-
-	private void setAsFinal() {
-		subWord = addFinalChar(subWord);
-	}
-
-	/**
-	 * length without final char
-	 * Retourne la taille d'une String en excluant le char finalChar.
-	 */
-	private final int lengthWFC(String w) {
-		if (w.length() == 0) {
-			return 0;
-		} else {
-			if (w.charAt(w.length()-1) == finalChar)
-				return w.length()-1;
-			else return w.length();
-		}
-	}
 
 	public PatriciaTries suppression(String word) {	// TODO
 		return this;
@@ -130,7 +139,7 @@ public class PatriciaTries implements Trie {
 	public int comptageMot() {
 		int result = 0;
 		
-		if (subWord.contains(finalChar+""))
+		if (isFinal)
 			result++;
 		
 		for (PatriciaTries pt : tries) {
@@ -141,11 +150,45 @@ public class PatriciaTries implements Trie {
 	}
 
 	@Override
-	public String[] listeMots() {
-		// TODO Auto-generated method stub
-		return null;
+	public String[] listeMots() { //TODO n'ajoute que les mots dont la fin est une feuille.
+		return toArray(listeMotsIntern());
 	}
+	
+	private ArrayList<String> listeMotsIntern() {
+		ArrayList<String> result = new ArrayList<>();
+		
+		if (isFinal) {
+			result.add(subWord);
+			return result;
+			
+		} else {
+			ArrayList<String> tmp = new ArrayList<>();
+			
+			for (PatriciaTries pt : tries) {
+				tmp.addAll(pt.listeMotsIntern());
+			}
+			
+			for (String s : tmp) {
+				result.add(subWord + s);
+			}
 
+			return result;
+		}
+		
+	}
+	
+	
+	private String[] toArray(ArrayList<String> liste) {
+		String[] result = new String[liste.size()];
+		
+		for (int i = 0; i < result.length; i++) {
+			result[i] = liste.get(i);
+		}
+		
+		return result;
+		
+	}
+	
 	@Override
 	public int comptageNil() {
 		// TODO Auto-generated method stub
@@ -225,11 +268,19 @@ public class PatriciaTries implements Trie {
 		return result;
 	}
 	
+	private void setFinal() {
+		this.isFinal = true;
+	}
+	
+	private void setNotFinal() {
+		this.isFinal = false;
+	}
+	
 	private String toString(int level) {
 		String result = "";
 		String tabs = getTabs(level);
 		
-		result +=  tabs + "(" + subWord + ")";
+		result +=  tabs + "(" + subWord + ((isFinal)? "FIN" : "") + ")";
 		result += "{\n";
 
 		for (PatriciaTries pt : tries) {
@@ -244,4 +295,25 @@ public class PatriciaTries implements Trie {
 	public String toString() {
 		return toString(0);
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof PatriciaTries) {
+			PatriciaTries pt = (PatriciaTries) obj;
+			return pt.subWord.equals(subWord);
+		} else {
+			return false;
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+

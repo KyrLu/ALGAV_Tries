@@ -1,5 +1,9 @@
 package test;
 
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
+
 import tries.PatriciaTries;
 import tries.Trie;
 import tries.TriesHybrides;
@@ -10,11 +14,14 @@ public class Main {
 			+ "la superbe phrase ci dessous, un modele du genre, que toute dactylo connait par coeur puisque"
 			+ " elle fait appel a chacune des touches du clavier de la machine a ecrire";
 	
-	public final static String test1 = "test tete tester table autre";
+	public final static String test1 = "test tete tester table autre testeur testeurs";
+	public final static String test2 = "test tete tester";
+	public final static String test3 = "test tete tester table";
+	public final static String test4 = "test tester test table test testation testationner";
 	
 	public static void main(String[] args) {
-//		testHybride();
-		testPatricia();
+		testHybride();
+//		testPatricia();
 	}
 	
 	public static void testHybride() {
@@ -41,7 +48,8 @@ public class Main {
 		
 
 		for (String mot : hybride.listeMots())
-			System.out.println(mot);
+			System.out.print(mot+ " ");
+		System.out.println();
 
 		System.out.println("Hauteur : " + hybride.hauteur());
 		System.out.println("Hauteur moyenne : " + hybride.profondeurMoyenne());
@@ -65,25 +73,52 @@ public class Main {
 	
 	public static void testPatricia() {
 		PatriciaTries patricia = new PatriciaTries("");
-//		patricia = (PatriciaTries) ajoutPhrase(patricia, exempleDeBase);
-		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
+		patricia = (PatriciaTries) ajoutPhrase(patricia, exempleDeBase);
+//		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
+//		patricia = (PatriciaTries) ajoutPhrase(patricia, test2);
+//		patricia = (PatriciaTries) ajoutPhrase(patricia, test3);
+//		patricia = (PatriciaTries) ajoutPhrase(patricia, test4);
+		
 		
 		System.out.println(patricia);
 		System.out.println("Hauteur : " + patricia.hauteur());
 		System.out.println("profondeur moyenne : " + patricia.profondeurMoyenne());
-		System.out.println("Nombre de mots : " + patricia.comptageMot() + " doit être de ");
+		System.out.println("Nombre de mots : " + patricia.comptageMot());
+		afficherListMots(patricia.listeMots());
+
+		TreeSet<String> listeMots = new TreeSet<String>();
+		
+		for (String s : listeMots) {
+			System.out.print(s + " ");
+		}
+		System.out.println();
+		
+		System.out.println("Nombre de mots pour exemple de base : " + listeMots.size());
+		
+		System.out.println("Missing words :");
+		System.out.println();
+		
 		
 //		TriesVisualisation.displayTrie(patricia);
 	
 	}
 	
+	public static void afficherListMots(String[] liste) {
+		System.out.println("Liste de mots : ");
+		for (String string : liste) {
+			System.out.print(string + " ");
+		}
+		System.out.println();
+	}
+	
 	public static Trie ajoutPhrase(Trie arbre, String phrase) {
 		String[] mots = phrase.split("[ ,]"); //rajouter virgule dans les mots ?
+		
 		for (String mot : mots) {
 			if (! mot.isEmpty()) {
 				System.out.println(mot);
-				arbre.ajouterMot(mot);
-//				System.out.println(arbre);
+				arbre.ajouterMot(mot.toLowerCase());
+				System.out.println(arbre);
 			}
 		}
 		return arbre;
