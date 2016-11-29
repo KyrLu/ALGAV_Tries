@@ -1,9 +1,5 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.TreeSet;
-
 import tries.PatriciaTries;
 import tries.Trie;
 import tries.TriesHybrides;
@@ -87,7 +83,7 @@ public class Main {
 		afficherListMots(patricia.listeMots());
 
 		System.out.println("Nils : " + patricia.comptageNil());
-		TriesVisualisation.displayTrie(patricia);
+//		TriesVisualisation.displayTrie(patricia);
 	
 	}
 	

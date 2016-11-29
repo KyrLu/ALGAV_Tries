@@ -3,6 +3,7 @@ package test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 import org.junit.Test;
 
@@ -10,8 +11,8 @@ import tries.PatriciaTries;
 import tries.Trie;
 
 public class UnitaryTestsPatricia {
-	public static final String exempleDeBase = "A quel genial professeur de dactylographie sommes nous redevables de "
-			+ "la superbe phrase ci dessous, un modele du genre, que toute dactylo connait par coeur puisque"
+	public static final String exempleDeBase = "A quel genial professeur de dactylo sommes nous redevables de "
+			+ "la superbe phrase ci dessous, un modele du genre, que toute dactylographie connait par coeur puisque"
 			+ " elle fait appel a chacune des touches du clavier de la machine a ecrire";
 	
 	public final static String test1 = "test tete tester table autre testeur testeurs";
@@ -19,6 +20,9 @@ public class UnitaryTestsPatricia {
 	public final static String test3 = "test tete tester table";
 	public final static String test4 = "test tester test table test testation testationner";
 	public final static String test5 = "tester tete";
+	public final static String test6 = "a b c d aa bb cc dd ac a b c d";
+	public final static String test7 = exempleDeBase + "qu pro con nait";
+	public final static String test8 = exempleDeBase + "ga greivs greece great greatly grease gra";
 	
 	/*INSERTION*/
 	@Test
@@ -27,6 +31,8 @@ public class UnitaryTestsPatricia {
 
 		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
 		assertTrue(contains(toArrayList(test1.split(" ")), toArrayList(patricia.listeMots())));
+		assertEquals(7, patricia.comptageMot());
+
 	}
 	
 	@Test
@@ -35,6 +41,8 @@ public class UnitaryTestsPatricia {
 
 		patricia = (PatriciaTries) ajoutPhrase(patricia, test2);
 		assertTrue(contains(toArrayList(test2.split(" ")), toArrayList(patricia.listeMots())));
+		assertEquals(3, patricia.comptageMot());
+
 	}
 	
 	@Test
@@ -43,24 +51,64 @@ public class UnitaryTestsPatricia {
 
 		patricia = (PatriciaTries) ajoutPhrase(patricia, test3);
 		assertTrue(contains(toArrayList(test3.split(" ")), toArrayList(patricia.listeMots())));
+		assertEquals(4, patricia.comptageMot());
+
 	}
 	
 	@Test
 	public void testInsert4() {
 		PatriciaTries patricia = new PatriciaTries("");
-		
+		TreeSet<String> words = new TreeSet<>();
+		for (String string : test4.toLowerCase().split("[ ,]")) 
+			if (!string.equals(""))
+				words.add(string);
 		patricia = (PatriciaTries) ajoutPhrase(patricia, test4);
 		assertTrue(contains(toArrayList(test4.split(" ")), toArrayList(patricia.listeMots())));
+		assertEquals(words.size(), patricia.comptageMot());
+
 	}
 
+	@Test
+	public void testInsert5() {
+		PatriciaTries patricia = new PatriciaTries("");
+		
+		
+		
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test6);
+		assertTrue(contains(toArrayList(test6.split(" ")), toArrayList(patricia.listeMots())));
+		assertEquals(9, patricia.comptageMot());
+
+	}
+	
+	@Test
+	public void testInsert6() {
+		PatriciaTries patricia = new PatriciaTries("");
+
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test7.toLowerCase());
+
+		TreeSet<String> words = new TreeSet<>();
+		for (String string : test7.toLowerCase().split("[ ,]")) 
+			if (!string.equals(""))
+				words.add(string);
+		
+		assertTrue(contains(toArrayList(test7.split("[ ,]")), toArrayList(patricia.listeMots())));
+		assertEquals(words.size(), patricia.comptageMot());
+	}
+	
 	@Test
 	public void testInsertBase() {
 		PatriciaTries patricia = new PatriciaTries("");
 
 		patricia = (PatriciaTries) ajoutPhrase(patricia, exempleDeBase.toLowerCase());
+
+		TreeSet<String> words = new TreeSet<>();
+		for (String string : exempleDeBase.toLowerCase().split("[ ,]")) 
+			if (!string.equals(""))
+				words.add(string);
+		
 		assertTrue(contains(toArrayList(exempleDeBase.split("[ ,]")), toArrayList(patricia.listeMots())));
+		assertEquals(words.size(), patricia.comptageMot());
 	}
-	
 	
 	
 	/*RECHERCHE*/
@@ -98,6 +146,14 @@ public class UnitaryTestsPatricia {
 		PatriciaTries patricia = new PatriciaTries("");
 		patricia = (PatriciaTries) ajoutPhrase(patricia, test5);
 		assertFalse(patricia.recherche("test"));
+	}
+	
+	@Test
+	public void testRecherche8() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test8);
+		Shakespeare.toFile(patricia, "unit.txt");
+		assertTrue(patricia.recherche("greivs"));
 	}
 	
 	
@@ -146,9 +202,7 @@ public class UnitaryTestsPatricia {
 	public void testSuppr3() {
 		PatriciaTries patricia = new PatriciaTries("");
 		patricia = (PatriciaTries) ajoutPhrase(patricia, test2);
-		System.out.println(patricia);
 		patricia.suppression("te");
-		System.out.println(patricia);
 		assertEquals(3, patricia.comptageMot());
 	}
 	
@@ -158,6 +212,16 @@ public class UnitaryTestsPatricia {
 		patricia = (PatriciaTries) ajoutPhrase(patricia, test2);
 		patricia.suppression("st");
 		assertEquals(3, patricia.comptageMot());
+	}
+	
+	@Test
+	public void testSuppr5() {
+		PatriciaTries patricia = new PatriciaTries("");
+		patricia = (PatriciaTries) ajoutPhrase(patricia, test6);
+		
+		
+		patricia.suppression("ac");
+		assertEquals(8, patricia.comptageMot());
 	}
 	
 	public static boolean contains(ArrayList<String> array1, ArrayList<String> array2) {
