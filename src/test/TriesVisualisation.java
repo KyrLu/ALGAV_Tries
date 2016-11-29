@@ -3,9 +3,6 @@ package test;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.ui.layout.springbox.BarnesHutLayout;
-import org.graphstream.ui.layout.springbox.implementations.LinLog;
-import org.graphstream.ui.view.Viewer;
 
 import tries.PatriciaTries;
 import tries.Trie;
@@ -32,7 +29,7 @@ public class TriesVisualisation {
 		
 		buildHybride(t, graph, graph.addNode(t.getCaractere() + ":" + nextId()));
 		
-		Viewer v = graph.display();
+		graph.display();
 	}
 	
 	private static void buildHybride(TriesHybrides t, Graph g, Node crtNode) {

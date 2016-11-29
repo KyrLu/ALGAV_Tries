@@ -2,7 +2,6 @@ package test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TreeSet;
@@ -13,9 +12,8 @@ import tries.TriesHybrides;
 
 public class Shakespeare {
 	private final static String DIRECTORY_PATH = "/home/alexandre/git/ALGAV_Tries/test-data/shakespeare";
-	private final static String DIRECTORY_PATH_LOREM = "/home/alexandre/git/ALGAV_Tries/test-data/lorem";
 	public final static boolean VISUALIZE = false;
-	public final static boolean HYBRIDE = false;
+	public final static boolean HYBRIDE = true;
 	public final static boolean PATRICIA = true;
 	
 	private static int wordCount = -1;
@@ -27,7 +25,6 @@ public class Shakespeare {
 		
 		start = System.currentTimeMillis();
 		ArrayList<ArrayList<String>> data = loadDataFiles();
-//		ArrayList<ArrayList<String>> data = loadLoremDataFiles();
 		time = System.currentTimeMillis();
 		System.out.println("Loaded in " + getTimer(start, time));
 		int total = 0;
@@ -70,12 +67,7 @@ public class Shakespeare {
 			
 			PatriciaTries patricia = new PatriciaTries();
 			insertTrie(patricia, data);
-			toFile(patricia, "t_print.txt");
 			statsTrie(patricia);
-			
-			
-			
-			
 			
 			if (VISUALIZE)
 				TriesVisualisation.displayTrie(patricia);
@@ -203,62 +195,8 @@ public class Shakespeare {
 		return result;
 	}
 	
-
-	private static ArrayList<ArrayList<String>> loadLoremDataFiles() {
-		ArrayList<ArrayList<String>> result = new ArrayList<>();
-		ArrayList<String> fileContent;
-		File dir = new File(DIRECTORY_PATH_LOREM);
-		File currentFile;
-		Scanner sc;
-		
-		
-		if (!dir.isDirectory())
-			throw new Error(DIRECTORY_PATH + " is not a directory.");
-		
-		
-		System.out.println("Loading test files....");
-		
-		for (String s : dir.list()) {
-			currentFile = new File(dir.getAbsolutePath() + "/" + s);
-			try {
-				System.out.print("Loading " + s + "....");
-				sc = new Scanner(currentFile);
-				fileContent = new ArrayList<>();
-				while (sc.hasNextLine()) {
-					fileContent.add(sc.nextLine().toLowerCase());
-				}
-				
-				result.add(fileContent);
-				sc.close();
-				System.out.println("Done");
-			} catch (FileNotFoundException e) {
-				System.out.println("Failed");
-			}
-			
-			
-		}
-		
-		System.out.println("Loading complete.");
-		
-		return result;
-	}
-	
 	public static void main(String[] args) {
 		launchShakespearTest();
-	}
-	
-	public static void toFile(Trie t, String file) {
-		PrintWriter out;
-		try {
-			out = new PrintWriter(new File(file));
-			out.append("*************************************\n");
-			out.append(t.toString() + "\n");
-			out.append("*************************************\n");
-			out.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 }

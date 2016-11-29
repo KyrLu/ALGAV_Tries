@@ -152,7 +152,6 @@ public class UnitaryTestsPatricia {
 	public void testRecherche8() {
 		PatriciaTries patricia = new PatriciaTries("");
 		patricia = (PatriciaTries) ajoutPhrase(patricia, test8);
-		Shakespeare.toFile(patricia, "unit.txt");
 		assertTrue(patricia.recherche("greivs"));
 	}
 	
