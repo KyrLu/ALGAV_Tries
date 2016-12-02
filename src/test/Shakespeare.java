@@ -2,8 +2,10 @@ package test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TreeSet;
 
 import tries.PatriciaTries;
@@ -15,6 +17,8 @@ public class Shakespeare {
 	public final static boolean VISUALIZE = false;
 	public final static boolean HYBRIDE = true;
 	public final static boolean PATRICIA = true;
+	
+	public final static boolean BENCH = true;
 	
 	private static int wordCount = -1;
 	private static TreeSet<String> wordList;
@@ -52,9 +56,14 @@ public class Shakespeare {
 			System.out.println("Testing Hybride trie.");
 			
 			TriesHybrides hybride = new TriesHybrides();
-
 			insertTrie(hybride, data);
 			statsTrie(hybride);
+			
+			if (BENCH) {
+				insertionBenchmark("bench_hybride.dat", new TriesHybrides(), data);
+				rechercheBenchmark("searchbench_hybride.dat", hybride, words);
+				suppressionBenchmark("deletebench_hybride.dat", hybride, words);
+			}
 			
 			if (VISUALIZE)
 				TriesVisualisation.displayTrie(hybride);
@@ -69,11 +78,18 @@ public class Shakespeare {
 			insertTrie(patricia, data);
 			statsTrie(patricia);
 			
+			if (BENCH) {
+				insertionBenchmark("bench_patricia.dat", new PatriciaTries(), data);
+				rechercheBenchmark("searchbench_patricia.dat", patricia, words);
+				suppressionBenchmark("deletebench_patricia.dat", patricia, words);
+			}
+			
 			if (VISUALIZE)
 				TriesVisualisation.displayTrie(patricia);
 		}
 		
 		
+		System.out.println("Done, bye bye.");
 		
 	}
 	
@@ -156,6 +172,10 @@ public class Shakespeare {
 		return getTimer(start, time, true);
 	}
 	
+	private static String getTimerNano(long start, long time) {
+		return ((time - start)/1000.0)+"";
+	}
+	
 	private static ArrayList<ArrayList<String>> loadDataFiles() {
 		ArrayList<ArrayList<String>> result = new ArrayList<>();
 		ArrayList<String> fileContent;
@@ -193,6 +213,76 @@ public class Shakespeare {
 		System.out.println("Loading complete.");
 		
 		return result;
+	}
+	
+	
+	public static void insertionBenchmark(String resultPath, Trie t, ArrayList<ArrayList<String>> data) {
+		try {
+			PrintWriter out = new PrintWriter(new File(resultPath));
+			long start, time;
+			int i = 0;
+			System.out.println("Building ...");
+			for (ArrayList<String> a : data) {
+				for (String s : a) {
+					start = System.nanoTime();
+					t.ajouterMot(s);
+					time = System.nanoTime();
+					out.println(i + " " + getTimerNano(start, time));
+					i++;
+				}
+			}
+			
+			out.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("Error while opening result file. " + e.getMessage());
+		}
+				
+	}
+	
+	public static void rechercheBenchmark(String resultPath, Trie t, Set<String> data) {
+		try {
+			PrintWriter out = new PrintWriter(new File(resultPath));
+			long start, time;
+			int i = 0;
+			System.out.println("Searching ...");
+			for (String s : data) {
+					start = System.nanoTime();
+					t.recherche(s);
+					time = System.nanoTime();
+					out.println(i + " " + getTimerNano(start, time));
+					i++;
+			}
+			
+			out.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("Error while opening result file. " + e.getMessage());
+		}
+				
+	}
+	
+	
+	public static void suppressionBenchmark(String resultPath, Trie t, Set<String> data) {
+		try {
+			PrintWriter out = new PrintWriter(new File(resultPath));
+			long start, time;
+			int i = 0;
+			System.out.println("Searching ...");
+			for (String s : data) {
+					start = System.nanoTime();
+					t.suppression(s);
+					time = System.nanoTime();
+					out.println(i + " " + getTimerNano(start, time));
+					i++;
+			}
+			
+			out.close();
+			
+		} catch (FileNotFoundException e) {
+			System.out.println("Error while opening result file. " + e.getMessage());
+		}
+				
 	}
 	
 	public static void main(String[] args) {

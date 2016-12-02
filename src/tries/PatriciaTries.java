@@ -1,24 +1,26 @@
 package tries;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
 
-public class PatriciaTries implements Trie {
+public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 	private String subWord;				// subWord de ce PATRICIATries. Si il finit par ETX, fin du mot (et le tries devrait etre vide)
-	private ArrayList<PatriciaTries> tries;		// liste des sous-arbres. Taille de 256 (255 caractere + ETX)
+	private TreeSet<PatriciaTries> tries;		// liste des sous-arbres. Taille de 256 (255 caractere + ETX)
 	private boolean isFinal;
 	
-	public PatriciaTries(String subWord, ArrayList<PatriciaTries> tries) {
+	public PatriciaTries(String subWord, TreeSet<PatriciaTries> tries) {
 		this.subWord = subWord;
 		this.tries = tries;
 		isFinal = false;
 	}
 
 	public PatriciaTries(String subWord) {
-		this(subWord, new ArrayList<>());
+		this(subWord, new TreeSet<>());
 	}
 	
 	public PatriciaTries() {
-		this("", new ArrayList<>());
+		this("", new TreeSet<>());
 	}
 
 	public boolean isPrefix(String word) {
@@ -146,7 +148,7 @@ public class PatriciaTries implements Trie {
 			
 			if (candidate.removeEmptyFinal()) {
 				if (candidate.tries.size() == 1) { //merge tries si il ne contient qu'un element.
-					PatriciaTries toDelete = candidate.tries.get(0);
+					PatriciaTries toDelete = candidate.tries.first();
 					
 					candidate.isFinal = toDelete.isFinal;
 					candidate.subWord += toDelete.subWord;
@@ -390,12 +392,17 @@ public class PatriciaTries implements Trie {
 		}
 	}
 	
-	public ArrayList<PatriciaTries> getTries() {
+	public Set<PatriciaTries> getTries() {
 		return tries;
 	}
 	
 	public String getSubWord() {
 		return subWord;
+	}
+
+	@Override
+	public int compareTo(PatriciaTries o) {
+		return subWord.compareTo(o.subWord);
 	}
 }
 

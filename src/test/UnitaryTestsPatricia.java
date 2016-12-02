@@ -105,7 +105,6 @@ public class UnitaryTestsPatricia {
 		for (String string : exempleDeBase.toLowerCase().split("[ ,]")) 
 			if (!string.equals(""))
 				words.add(string);
-		
 		assertTrue(contains(toArrayList(exempleDeBase.split("[ ,]")), toArrayList(patricia.listeMots())));
 		assertEquals(words.size(), patricia.comptageMot());
 	}
