@@ -18,7 +18,7 @@ public class Shakespeare {
 	public final static boolean HYBRIDE = true;
 	public final static boolean PATRICIA = true;
 	
-	public final static boolean BENCH = true;
+	public final static boolean BENCH = false;
 	
 	private static int wordCount = -1;
 	private static TreeSet<String> wordList;
@@ -59,6 +59,8 @@ public class Shakespeare {
 			insertTrie(hybride, data);
 			statsTrie(hybride);
 			
+			System.out.println("prefix of the : " + hybride.prefixe("g"));
+			
 			if (BENCH) {
 				insertionBenchmark("bench_hybride.dat", new TriesHybrides(), data);
 				rechercheBenchmark("searchbench_hybride.dat", hybride, words);
@@ -77,6 +79,8 @@ public class Shakespeare {
 			PatriciaTries patricia = new PatriciaTries();
 			insertTrie(patricia, data);
 			statsTrie(patricia);
+			
+			System.out.println("prefix of the : " + patricia.prefixe("g"));
 			
 			if (BENCH) {
 				insertionBenchmark("bench_patricia.dat", new PatriciaTries(), data);

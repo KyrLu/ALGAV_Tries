@@ -61,9 +61,8 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 						candidate.tries.add(getEmptyFinal());
 				}
 			}
-		} else if (commonPrefixLength == wordLength && commonPrefixLength < candidateLength) { //test[FIN, erFIN] + tes = tes[stFIN, erFIN]
-			//Probablement OK
-			
+		} else if (commonPrefixLength == wordLength 
+				&& commonPrefixLength < candidateLength) { //test[FIN, erFIN] + tes = tes[stFIN, erFIN]
 			PatriciaTries newPt = new PatriciaTries(commonPrefix);
 			this.tries.remove(candidate);
 			candidate.subWord = candidate.subWord.substring(commonPrefixLength);
@@ -71,7 +70,6 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 			this.tries.add(newPt);
 			newPt.tries.add(candidate);
 			newPt.tries.add(getEmptyFinal());
-			
 			
 		} else if (commonPrefixLength < candidateLength 
 				&& commonPrefixLength < wordLength) { //éclatement, si on insere tete dans testFIN -> te[teFIN, stFIN]
@@ -94,7 +92,7 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 				&& commonPrefixLength == candidateLength) { 
 			candidate.ajouterMot(word.substring(commonPrefixLength));
 			
-			if (candidate.isFinal && candidate.tries.size() != 0) { //XXX possible bug
+			if (candidate.isFinal && candidate.tries.size() != 0) { 
 				candidate.isFinal = false;
 				candidate.tries.add(getEmptyFinal());
 			}
@@ -280,19 +278,24 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 		return result;
 	}
 
-	//TODO ne fonctionne pas, affiche 0 tout le temps.
 	@Override
 	public double profondeurMoyenne() {
 		return nextLevelMean(0);
 	}
 
 	protected double nextLevelMean(int level) {
+		if (tries.size() == 0)
+			return level + 0.0;
+
 		double result = 0;
 		double nonNull = 0;
-
+		
+		
 		for (PatriciaTries t : tries) {
-			if (t != null)
+			if (t != null) {
 				result += t.nextLevelMean(level+1);
+				nonNull++;
+			}
 		}
 
 		//Evite une division par 0.
@@ -304,29 +307,23 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 
 	@Override
 	public int prefixe(String word) {
+		int result = 0;
 		String commonPrefix;
-		
-		if (word.equals(""))
-			return tries.size();
 		
 		for (PatriciaTries pt : tries) {
 			commonPrefix = pt.getPrefixInCommon(word);
 			if (!commonPrefix.equals("")) {
-				
 				if (pt.subWord.length() > commonPrefix.length() && word.length() == commonPrefix.length()) {
-					
-					return pt.comptageMot() + ((pt.isFinal) ? 1 : 0);
+					result += pt.comptageMot() + ((pt.isFinal) ? 1 : 0);
 				} else if (pt.subWord.length() == commonPrefix.length() && word.length() > commonPrefix.length()) {
 					
-					return pt.prefixe(word.substring(commonPrefix.length()));
+					result += pt.prefixe(word.substring(commonPrefix.length()));
 				} else if (commonPrefix.length() == word.length() && word.length() == pt.subWord.length()) {
-					return pt.comptageMot() + ((pt.isFinal) ? 1 : 0);
-				} else {
-					return 0;
+					result += pt.comptageMot() + ((pt.isFinal) ? 1 : 0);
 				}
 			}
 		}
-		return 0;
+		return result;
 	}
 
 	private boolean hasEmptyFinal() {
