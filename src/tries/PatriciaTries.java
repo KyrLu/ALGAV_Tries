@@ -315,9 +315,10 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 			if (!commonPrefix.equals("")) {
 				if (pt.subWord.length() > commonPrefix.length() && word.length() == commonPrefix.length()) {
 					result += pt.comptageMot() + ((pt.isFinal) ? 1 : 0);
+				
 				} else if (pt.subWord.length() == commonPrefix.length() && word.length() > commonPrefix.length()) {
-					
 					result += pt.prefixe(word.substring(commonPrefix.length()));
+
 				} else if (commonPrefix.length() == word.length() && word.length() == pt.subWord.length()) {
 					result += pt.comptageMot() + ((pt.isFinal) ? 1 : 0);
 				}
@@ -326,6 +327,79 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 		return result;
 	}
 
+	public PatriciaTries fusion(PatriciaTries toFusion) {
+//		if (this.subWord.equals(toFusion.subWord) && this.tries.size() == 0 && toFusion.tries.size() == 0)
+//			return this;
+		
+		
+		String commonPrefix;
+		TreeSet<PatriciaTries> noConflict = (TreeSet<PatriciaTries>) toFusion.tries.clone();
+		
+		for (PatriciaTries ptSrc : tries) {
+			for (PatriciaTries pt : toFusion.tries) {
+				commonPrefix = ptSrc.getPrefixInCommon(pt.subWord);
+				
+				int commonPrefixLength = commonPrefix.length();
+				int ptSrcLength = ptSrc.subWord.length();
+				int ptLength = pt.subWord.length();
+				
+				
+				
+				if (!commonPrefix.equals("")) {
+//					System.out.println();
+//					System.out.println(ptSrc.subWord + " and " + pt.subWord + " are being merged.");
+					
+					
+					noConflict.remove(pt);
+					if (commonPrefixLength == ptSrcLength && commonPrefixLength == ptLength) {
+//						System.out.println("Cas #1");
+//						System.out.println(ptSrc.tries.size());
+//						System.out.println(pt.tries.size());
+						ptSrc.fusion(pt);
+					} else if (commonPrefixLength < ptSrcLength && commonPrefixLength < ptLength) { // test + tete
+//						System.out.println("Cas #2");
+						PatriciaTries newPt = new PatriciaTries(commonPrefix);
+						
+						ptSrc.subWord = ptSrc.subWord.substring(commonPrefixLength);
+						pt.subWord = pt.subWord.substring(commonPrefixLength);
+						
+						newPt.tries.add(pt);
+						newPt.tries.add(ptSrc);
+					} else if (commonPrefixLength == ptSrcLength && commonPrefixLength < ptLength) { // test + tester
+//						System.out.println("Cas #3");
+						pt.subWord = pt.subWord.substring(commonPrefixLength);
+						ptSrc.tries.add(pt);
+						
+					} else if (commonPrefixLength == ptLength && commonPrefixLength < ptSrcLength) { // tester + test
+//						System.out.println("Cas #4");
+
+						System.out.println(ptSrc);
+						System.out.println(pt);
+						
+						PatriciaTries newPt = new PatriciaTries(ptSrc.subWord.substring(commonPrefixLength));
+						newPt.isFinal = ptSrc.isFinal;
+						newPt.tries.addAll(ptSrc.tries);
+						
+						ptSrc.tries.clear();
+						ptSrc.subWord = commonPrefix;
+						ptSrc.isFinal = pt.isFinal;
+						ptSrc.tries.addAll(pt.tries);
+						ptSrc.tries.add(newPt);
+					} else {
+						System.out.println("Error : Missing case");
+					}
+					
+				} else {
+//					System.out.println("No conflict for " + ptSrc.subWord + " and " + pt.subWord + ".");
+				}
+			}
+		}
+		
+		this.tries.addAll(noConflict);
+		
+		return this;
+	}
+	
 	private boolean hasEmptyFinal() {
 		for (PatriciaTries pt : tries) {
 			if (pt.subWord.equals("") && pt.isFinal)

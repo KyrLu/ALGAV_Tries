@@ -21,8 +21,8 @@ public class UnitaryTestsPatricia {
 	public final static String test4 = "test tester test table test testation testationner";
 	public final static String test5 = "tester tete";
 	public final static String test6 = "a b c d aa bb cc dd ac a b c d";
-	public final static String test7 = exempleDeBase + "qu pro con nait";
-	public final static String test8 = exempleDeBase + "ga greivs greece great greatly grease gra";
+	public final static String test7 = exempleDeBase + " qu pro con nait";
+	public final static String test8 = exempleDeBase + " ga greivs greece great greatly grease gra";
 	
 	/*INSERTION*/
 	@Test
@@ -222,10 +222,104 @@ public class UnitaryTestsPatricia {
 		assertEquals(8, patricia.comptageMot());
 	}
 	
+	
+	/*FUSION*/
+	@Test
+	public void testFusion1() {
+		PatriciaTries pt1, pt2;
+		pt1 = new PatriciaTries();
+		pt2 = new PatriciaTries();
+		
+		pt1 = (PatriciaTries) ajoutPhrase(pt1, test1);
+		pt2 = (PatriciaTries) ajoutPhrase(pt2, test1);
+		
+		pt1 = pt1.fusion(pt2);
+		
+		assertTrue(contains(toArrayList(test1.split(" ")), toArrayList(pt1.listeMots())));
+		assertEquals(7, pt1.comptageMot());
+
+	}
+	
+	@Test
+	public void testFusion2() {
+		PatriciaTries pt1, pt2;
+		pt1 = new PatriciaTries();
+		pt2 = new PatriciaTries();
+		
+		
+		pt1 = (PatriciaTries) ajoutPhrase(pt1, test1);
+		pt2 = (PatriciaTries) ajoutPhrase(pt2, test6);
+		
+		pt1 = pt1.fusion(pt2);
+		
+		
+		
+		assertTrue(contains(toArrayList(pt1.listeMots()), toArrayList((test1 + " " + test6).split(" "))));
+	}
+	
+	@Test
+	public void testFusion3() {
+		PatriciaTries pt1, pt2;
+		pt1 = new PatriciaTries();
+		pt2 = new PatriciaTries();
+		
+		pt1 = (PatriciaTries) ajoutPhrase(pt1, test1);
+		pt2 = (PatriciaTries) ajoutPhrase(pt2, exempleDeBase.toLowerCase());
+		
+		pt1 = pt1.fusion(pt2);
+		
+		assertTrue(contains(toArrayList(pt1.listeMots()), toArrayList((test1 + " " + exempleDeBase).toLowerCase().split("[ ,]"))));
+	}
+	
+	@Test
+	public void testFusion4() {
+		PatriciaTries pt1, pt2;
+		pt1 = new PatriciaTries();
+		pt2 = new PatriciaTries();
+		
+		
+		pt1 = (PatriciaTries) ajoutPhrase(pt1, exempleDeBase.toLowerCase());
+		pt2 = (PatriciaTries) ajoutPhrase(pt2, exempleDeBase.toLowerCase());
+		
+		pt1 = pt1.fusion(pt2);
+		assertTrue(contains(toArrayList((exempleDeBase).toLowerCase().split("[ ,]")), toArrayList(pt1.listeMots())));
+	}
+	
+	@Test
+	public void testFusion5() {
+		PatriciaTries pt1, pt2;
+		pt1 = new PatriciaTries();
+		pt2 = new PatriciaTries();
+		
+		pt1 = (PatriciaTries) ajoutPhrase(pt1, test7.toLowerCase());
+		pt2 = (PatriciaTries) ajoutPhrase(pt2, test8.toLowerCase());
+		
+		pt1 = pt1.fusion(pt2);
+		
+		assertTrue(contains(toArrayList(pt1.listeMots()), toArrayList((test7 + " " + test8).toLowerCase().split("[ ,]"))));
+	}
+
+	@Test
+	public void testFusion6() {
+		PatriciaTries pt1, pt2;
+		pt1 = new PatriciaTries();
+		pt2 = new PatriciaTries();
+		
+		pt1 = (PatriciaTries) ajoutPhrase(pt1, test6.toLowerCase());
+		pt2 = (PatriciaTries) ajoutPhrase(pt2, exempleDeBase.toLowerCase());
+		
+		pt1 = pt1.fusion(pt2);
+		
+		assertTrue(contains(toArrayList(pt1.listeMots()), toArrayList((test6 + " " + exempleDeBase).toLowerCase().split("[ ,]"))));
+	}
+	
+	
 	public static boolean contains(ArrayList<String> array1, ArrayList<String> array2) {
 		for (String s : array2) {
-			if (!array1.contains(s))
+			if (!s.equals("") && !array1.contains(s)) {
+				System.out.println(s + " is missing!");
 				return false;
+			}
 		}
 		
 		return true;

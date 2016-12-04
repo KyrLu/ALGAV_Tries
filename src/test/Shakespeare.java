@@ -15,8 +15,9 @@ import tries.TriesHybrides;
 public class Shakespeare {
 	private final static String DIRECTORY_PATH = "/home/alexandre/git/ALGAV_Tries/test-data/shakespeare";
 	public final static boolean VISUALIZE = false;
-	public final static boolean HYBRIDE = true;
+	public final static boolean HYBRIDE = false;
 	public final static boolean PATRICIA = true;
+	public final static boolean FUSION = true;
 	
 	public final static boolean BENCH = false;
 	
@@ -81,6 +82,10 @@ public class Shakespeare {
 			statsTrie(patricia);
 			
 			System.out.println("prefix of the : " + patricia.prefixe("g"));
+			
+			if (FUSION)
+				testFusionPatricia(wordList);
+			
 			
 			if (BENCH) {
 				insertionBenchmark("bench_patricia.dat", new PatriciaTries(), data);
@@ -287,6 +292,42 @@ public class Shakespeare {
 			System.out.println("Error while opening result file. " + e.getMessage());
 		}
 				
+	}
+	
+	public static void testFusionPatricia(TreeSet<String> data) {
+		System.out.println("Testing fusion...");
+		
+		PatriciaTries p1 = new PatriciaTries();
+		PatriciaTries p2 = new PatriciaTries();
+		
+		int i = 0;
+		for (String string : data) {
+			if (i%2 == 0)
+				p1.ajouterMot(string);
+			else
+				p2.ajouterMot(string);
+			
+			i++;
+		}
+		
+		p1 = p1.fusion(p2);
+		
+		int wordCount = data.size();
+		int wordcountP1 = p1.comptageMot();
+		
+		if (wordcountP1 != wordCount) {
+			System.out.println("Fusion failed.");
+			System.out.println("Expected " + wordCount + ", found " + wordcountP1 + ".");
+			
+			TreeSet<String> missingWords = findMissingWords(data, p1.listeMots());
+			System.out.println("Missing words (" + missingWords.size() + ") : ");
+			
+			for (String s : missingWords) {
+				System.out.print(s + " ");
+			}
+			System.out.println();
+		}
+		
 	}
 	
 	public static void main(String[] args) {
