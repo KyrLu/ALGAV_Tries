@@ -225,29 +225,42 @@ public class TriesHybrides implements Trie {
 	
 	@Override
 	public double profondeurMoyenne() {
-		return nextLevelMean(0);
+		double[] result = nextLevelMean(0);
+		if (result[1] == 0)
+			return 0;
+		return result[0]/result[1];
 	}
 	
-	protected double nextLevelMean(int level) { //XXX methode pas sur du tout.
-		double result = 0;
+	protected double[] nextLevelMean(int level) {
+		double[] result = {0, 0};
+		double[] tmp;
 		
 		if (inf != null) {
-			result += inf.nextLevelMean(level+1);
+			tmp = inf.nextLevelMean(level+1);
+			result[0] += tmp[0];
+			result[1] += tmp[1];
 		} else {
-			result += level;
+			result[0] += level;
+			result[1] += 1;
 		}
 		if (eq != null) {
-			result += eq.nextLevelMean(level+1);
+			tmp = eq.nextLevelMean(level+1);
+			result[0] += tmp[0];
+			result[1] += tmp[1];
 		} else {
-			result += level;
+			result[0] += level;
+			result[1] += 1;
 		}
 		if (sup != null) {
-			result += sup.nextLevelMean(level+1);
+			tmp = sup.nextLevelMean(level+1);
+			result[0] += tmp[0];
+			result[1] += tmp[1];
 		} else {
-			result += level;
+			result[0] += level;
+			result[1] += 1;
 		}
 		
-		return result/3;
+		return result;
 	}
 	
 	@Override
