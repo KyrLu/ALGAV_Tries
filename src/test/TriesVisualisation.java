@@ -10,7 +10,16 @@ import tries.TriesHybrides;
 
 public class TriesVisualisation {
 	private static int crtId = 0;
-	
+	private static String DEFAULT_STYLE = "node { "
+				+ "text-background-color: white;"
+				+ "shape : box;"
+				+ "fill-color : red;"
+				+ "text-size : 15px;"
+				+ "text-padding : 5px;"
+				+ "size : 15px;"
+				+ "z-index : 1; } "
+				+ "edge {"
+				+ "fill-color : red;}";
 	
 	public static void displayTrie(Trie t) {
 		if (t instanceof TriesHybrides) {
@@ -28,7 +37,7 @@ public class TriesVisualisation {
 		Graph graph = new SingleGraph("Hybride");
 		
 		buildHybride(t, graph, graph.addNode(t.getCaractere() + ":" + nextId()));
-		
+		graph.addAttribute("ui.stylesheet", DEFAULT_STYLE);
 		graph.display();
 	}
 	
@@ -54,29 +63,23 @@ public class TriesVisualisation {
 	private static void displayPatricia(PatriciaTries pt) {
 		Graph g = new SingleGraph("Patricia");
 		
-		buildPatricia(pt, g);
-		
+		buildPatricia(pt, g, 0);
+
+		g.addAttribute("ui.stylesheet", DEFAULT_STYLE);
+
 		g.display();
 	}
 	
-	private static Node buildPatricia(PatriciaTries pt, Graph g) { //TODO Fix me!
+	private static Node buildPatricia(PatriciaTries pt, Graph g, int level) {
 		Node n;
-		String nodeSum = ":";
-		
-		for (PatriciaTries t : pt.getTries()) {
-			nodeSum += t.getSubWord()+":";
-		}
-		
-		System.out.println("label : " + nodeSum);
-		
+			
 		n = g.addNode(nextId()+"");
-		setLabel(n, nodeSum);
+		setLabel(n, pt.getSubWord() + ((pt.isFinal()) ? "FIN" : "") );
+		if (level == 0)
+			n.setAttribute("color", "red");
 		
 		for (PatriciaTries t : pt.getTries()) {
-			for (PatriciaTries t2 : t.getTries()) {
-				
-				g.addEdge(nextId()+"", n, buildPatricia(t2, g));
-			}
+				g.addEdge(nextId()+"", n, buildPatricia(t, g, level+1));
 		}
 		
 		return n;

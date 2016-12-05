@@ -423,7 +423,7 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 		return false;
 	}
 
-	private boolean isFinal() {
+	public boolean isFinal() {
 		return isFinal || hasEmptyFinal();
 	}
 

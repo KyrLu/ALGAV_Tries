@@ -69,26 +69,26 @@ public class Main {
 	
 	public static void testPatricia() {
 		PatriciaTries patricia = new PatriciaTries();
-//		patricia = (PatriciaTries) ajoutPhrase(patricia, exempleDeBase);
+		patricia = (PatriciaTries) ajoutPhrase(patricia, exempleDeBase);
 //		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
 //		patricia = (PatriciaTries) ajoutPhrase(patricia, test2);
 //		patricia = (PatriciaTries) ajoutPhrase(patricia, test3);
 //		patricia = (PatriciaTries) ajoutPhrase(patricia, test4);
 		
 		
-		PatriciaTries pt2 = new PatriciaTries();
+//		PatriciaTries pt2 = new PatriciaTries();
 		
-		patricia = (PatriciaTries) ajoutPhrase(patricia, "test tete tester table autre testeur testeurs");
-		pt2 = (PatriciaTries) ajoutPhrase(pt2, "a b c d aa bb cc dd ac a b c d");
-		
-		System.out.println("Before");
-		System.out.println(patricia);
-		System.out.println(pt2);
-		
-		patricia = patricia.fusion(pt2);
-		 
-		System.out.println("After");
-		System.out.println(patricia);
+//		patricia = (PatriciaTries) ajoutPhrase(patricia, "test tete tester table autre testeur testeurs");
+//		pt2 = (PatriciaTries) ajoutPhrase(pt2, "a b c d aa bb cc dd ac a b c d");
+//		
+//		System.out.println("Before");
+//		System.out.println(patricia);
+//		System.out.println(pt2);
+//		
+//		patricia = patricia.fusion(pt2);
+//		 
+//		System.out.println("After");
+//		System.out.println(patricia);
 		
 		afficherListMots(patricia.listeMots());
 		
@@ -100,7 +100,7 @@ public class Main {
 //		afficherListMots(patricia.listeMots());
 
 //		System.out.println("Nils : " + patricia.comptageNil());
-//		TriesVisualisation.displayTrie(patricia);
+		TriesVisualisation.displayTrie(patricia);
 	
 		
 		
