@@ -228,28 +228,26 @@ public class TriesHybrides implements Trie {
 		return nextLevelMean(0);
 	}
 	
-	protected double nextLevelMean(int level) {
+	protected double nextLevelMean(int level) { //XXX methode pas sur du tout.
 		double result = 0;
-		double nonNull = 0;
 		
 		if (inf != null) {
 			result += inf.nextLevelMean(level+1);
-			nonNull++;
+		} else {
+			result += level;
 		}
 		if (eq != null) {
-			result += eq.nextLevel(level+1);
-			nonNull++;
+			result += eq.nextLevelMean(level+1);
+		} else {
+			result += level;
 		}
 		if (sup != null) {
-			result += sup.nextLevel(level+1);
-			nonNull++;
+			result += sup.nextLevelMean(level+1);
+		} else {
+			result += level;
 		}
 		
-		//Evite une division par 0.
-		if (nonNull == 0)
-			return 0;
-		
-		return result/nonNull;
+		return result/3;
 	}
 	
 	@Override

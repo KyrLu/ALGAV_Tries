@@ -15,9 +15,9 @@ import tries.TriesHybrides;
 public class Shakespeare {
 	private final static String DIRECTORY_PATH = "/home/alexandre/git/ALGAV_Tries/test-data/shakespeare";
 	public final static boolean VISUALIZE = false;
-	public final static boolean HYBRIDE = false;
+	public final static boolean HYBRIDE = true;
 	public final static boolean PATRICIA = true;
-	public final static boolean FUSION = true;
+	public final static boolean FUSION = false;
 	
 	public final static boolean BENCH = false;
 	
