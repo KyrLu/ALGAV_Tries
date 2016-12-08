@@ -332,8 +332,8 @@ public class TriesHybrides implements Trie {
 				this.ajouterMot(mot);
 		else {
 			char caractereEq;
-			int indexEqDebut;
-			int indexSupDebut;
+			int indexEqDebut = -1;
+			int indexSupDebut = -1;
 			if (! this.estVide()) {
 				caractereEq = caractere;
 				int i = 0;
@@ -342,18 +342,33 @@ public class TriesHybrides implements Trie {
 				if (listeMots[i].charAt(0) != caractereEq)
 					indexSupDebut = i;
 				else {
-					indexEqDebut = i;
-					while (i < listeMots.length && listeMots[i].charAt(0) == caractere)
-						i++;
+					if (i < listeMots.length) {
+						indexEqDebut = i;
+						while (i < listeMots.length && listeMots[i].charAt(0) == caractere)
+							i++;
+						if (i != listeMots.length)
+							indexSupDebut = i;
+					}
 				}
 			}
-			else
+			else {
 				caractereEq = listeMots[listeMots.length / 2].charAt(0);
+				int i = listeMots.length / 2;
+				while (i > 0 && listeMots[i].charAt(0) == caractere)
+					i--;
+				if (i > 0)
+					indexEqDebut = i;
+				i = listeMots.length / 2;
+				while (i < listeMots.length && listeMots[i].charAt(0) == caractere)
+					i++;
+				if (i != listeMots.length)
+					indexSupDebut = i;
+			}
 			if (inf == null)
 				inf = new TriesHybrides();
 			if (sup == null)
 				sup = new TriesHybrides();
-				
+			
 		}
 		return this;
 	}
