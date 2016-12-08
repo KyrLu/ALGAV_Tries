@@ -325,6 +325,42 @@ public class TriesHybrides implements Trie {
 		base += "\n" + tabs + ")";
 		return base;
 	}
+
+	public TriesHybrides ajouterListMots(String[] listeMots) {
+		if (listeMots().length < 3)
+			for (String mot : listeMots)
+				this.ajouterMot(mot);
+		else {
+			char caractereEq;
+			int indexEqDebut;
+			int indexSupDebut;
+			if (! this.estVide()) {
+				caractereEq = caractere;
+				int i = 0;
+				while (i < listeMots.length && listeMots[i].charAt(0) < caractere)
+					i++;
+				if (listeMots[i].charAt(0) != caractereEq)
+					indexSupDebut = i;
+				else {
+					indexEqDebut = i;
+					while (i < listeMots.length && listeMots[i].charAt(0) == caractere)
+						i++;
+				}
+			}
+			else
+				caractereEq = listeMots[listeMots.length / 2].charAt(0);
+			if (inf == null)
+				inf = new TriesHybrides();
+			if (sup == null)
+				sup = new TriesHybrides();
+				
+		}
+		return this;
+	}
+	
+	private TriesHybrides equilibrer() {
+		
+	}
 	
 	public boolean estVide() {
 		return caractere == 0;
