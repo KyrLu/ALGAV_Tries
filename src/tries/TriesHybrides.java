@@ -332,43 +332,66 @@ public class TriesHybrides implements Trie {
 				this.ajouterMot(mot);
 		else {
 			char caractereEq;
-			int indexEqDebut = -1;
-			int indexSupDebut = -1;
-			if (! this.estVide()) {
+			if (! this.estVide())
 				caractereEq = caractere;
-				int i = 0;
-				while (i < listeMots.length && listeMots[i].charAt(0) < caractere)
-					i++;
-				if (listeMots[i].charAt(0) != caractereEq)
-					indexSupDebut = i;
-				else {
-					if (i < listeMots.length) {
-						indexEqDebut = i;
-						while (i < listeMots.length && listeMots[i].charAt(0) == caractere)
-							i++;
-						if (i != listeMots.length)
-							indexSupDebut = i;
-					}
-				}
-			}
-			else {
+			else
 				caractereEq = listeMots[listeMots.length / 2].charAt(0);
-				int i = listeMots.length / 2;
-				while (i > 0 && listeMots[i].charAt(0) == caractere)
-					i--;
-				if (i > 0)
-					indexEqDebut = i;
-				i = listeMots.length / 2;
-				while (i < listeMots.length && listeMots[i].charAt(0) == caractere)
-					i++;
-				if (i != listeMots.length)
-					indexSupDebut = i;
-			}
+//			int indexEqDebut = -1;
+//			int indexSupDebut = -1;
+//			if (! this.estVide()) {
+//				caractereEq = caractere;
+//				int i = 0;
+//				while (i < listeMots.length && listeMots[i].charAt(0) < caractere)
+//					i++;
+//				if (listeMots[i].charAt(0) != caractereEq)
+//					indexSupDebut = i;
+//				else {
+//					if (i < listeMots.length) {
+//						indexEqDebut = i;
+//						while (i < listeMots.length && listeMots[i].charAt(0) == caractere)
+//							i++;
+//						if (i != listeMots.length)
+//							indexSupDebut = i;
+//					}
+//				}
+//			}
+//			else {
+//				caractereEq = listeMots[listeMots.length / 2].charAt(0);
+//				int i = listeMots.length / 2;
+//				while (i > 0 && listeMots[i].charAt(0) == caractere)
+//					i--;
+//				if (i > 0)
+//					indexEqDebut = i;
+//				i = listeMots.length / 2;
+//				while (i < listeMots.length && listeMots[i].charAt(0) == caractere)
+//					i++;
+//				if (i != listeMots.length)
+//					indexSupDebut = i;
+//			}
 			if (inf == null)
 				inf = new TriesHybrides();
 			if (sup == null)
 				sup = new TriesHybrides();
+			int i = 0;
+			ArrayList<String> listeInf = new ArrayList<String>();
+			ArrayList<String> listeEq = new ArrayList<String>();
+			ArrayList<String> listeSup = new ArrayList<String>();
 			
+			while (i < listeMots.length && listeMots[i].charAt(0) < caractereEq) {
+				listeInf.add(listeMots[i]);
+				i++;
+			}
+			while (i < listeMots.length && listeMots[i].charAt(0) == caractereEq) {
+				listeEq.add(listeMots[i]);
+				i++;
+			}
+			while (i < listeMots.length) {
+				listeSup.add(listeMots[i]);
+				i++;
+			}
+			inf.ajouterListMots(listeInf.toArray(new String[listeInf.size()]));
+			eq.ajouterListMots(listeInf.toArray(new String[listeEq.size()]));
+			sup.ajouterListMots(listeInf.toArray(new String[listeSup.size()]));
 		}
 		return this;
 	}
