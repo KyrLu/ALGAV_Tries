@@ -465,6 +465,11 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 			return false;
 		}
 	}
+	
+	public TriesHybrides conversion() {
+		TriesHybrides base = new TriesHybrides();
+		return base.ajouterListMots(this.listeMots());
+	}
 
 	public Set<PatriciaTries> getTries() {
 		return tries;

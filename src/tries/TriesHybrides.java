@@ -359,7 +359,7 @@ public class TriesHybrides implements Trie {
 	}
 	
 	private TriesHybrides equilibrer() {
-		
+		return null;
 	}
 	
 	public boolean estVide() {
