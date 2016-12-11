@@ -36,11 +36,6 @@ public class TriesHybrides implements Trie {
 	/*
 	 * Pour garder la possibilite de mettre une valeur
 	 * La fonction de l'interface utilise cette fonction : ajouterMot(mot, id)
-	 * 
-	 * TODO : optimisation possible : creer les TriesHybrides fils quand
-	 * le pere n'est pas vide pour ne pas verifier si les fils sont null
-	 * Ou alors faire une fonction static ?
-	 * (plus proche de l'algo du cours)
 	 */
 	public Trie ajouterMot(String mot, int valeur) {
 		if (this.estVide()) {
@@ -81,6 +76,56 @@ public class TriesHybrides implements Trie {
 		return this;
 	}
 
+	@Override
+	public Trie ajouterMot(String mot) {
+		id++;
+		return ajouterMot(mot, id);
+	}
+
+	public Trie ajouterMotPlusConversion(String mot, int valeur) {
+		if (this.estVide()) {
+			caractere = mot.charAt(0);
+			if (mot.length() == 1)
+				this.valeur = valeur;
+			else {
+				eq = new TriesHybrides(mot.substring(1), valeur);
+			}
+		}
+		else {
+			char initiale = mot.charAt(0);
+			if (initiale < caractere) {
+				if (inf == null)
+					inf = new TriesHybrides(mot, valeur);
+				else
+					inf.ajouterMot(mot, valeur);
+			}
+			else if (initiale > caractere) {
+				if (sup == null)
+					sup = new TriesHybrides(mot, valeur);
+				else
+					sup.ajouterMot(mot, valeur);
+			}
+			else if (mot.length() > 1) {
+				if (eq == null)
+					eq = new TriesHybrides(mot.substring(1), valeur);
+				else
+					eq.ajouterMot(mot.substring(1), valeur);
+			}
+			else {
+				if (this.valeur == null)
+					this.valeur = valeur;
+				else
+					id--; // mot pas ajoute ; une maniere + elegante ?
+			}
+		}
+		return this.equilibrer();
+	}
+
+	public Trie ajouterMotPlusConversion(String mot) {
+		id++;
+		return ajouterMotPlusConversion(mot, id);
+	}
+	
 	@Override
 	public Trie suppression(String mot) {
 		char initiale = mot.charAt(0);
@@ -266,7 +311,6 @@ public class TriesHybrides implements Trie {
 	@Override
 	public int prefixe(String mot) {
 		char initiale = mot.charAt(0);
-		System.out.println("mot : " + mot + " ; caractere : " + caractere);
 		if (initiale == caractere) {
 			
 			if (mot.length() == 1) {
@@ -290,12 +334,6 @@ public class TriesHybrides implements Trie {
 				return sup.prefixe(mot);
 		}
 		return 0;
-	}
-	
-	@Override
-	public Trie ajouterMot(String mot) {
-		id++;
-		return ajouterMot(mot, id);
 	}
 	
 	@Override
@@ -364,8 +402,25 @@ public class TriesHybrides implements Trie {
 		return this;
 	}
 	
-	private TriesHybrides equilibrer() {
-		return null;
+	public TriesHybrides equilibrer() {
+		int nbMotInf = inf == null ? 0 : inf.comptageMot();
+		int nbMotSup = sup == null ? 0 : sup.comptageMot();
+		int nbMotEq = eq == null ? 0 : eq.comptageMot();
+		nbMotEq += valeur == null ? 0 : 1;
+		int total = nbMotEq + nbMotInf + nbMotSup;
+		if (nbMotInf > total * 0.6) {
+			TriesHybrides newP = inf;
+			this.inf = inf.sup;
+			newP.sup = this.equilibrer();
+			return newP;
+		}
+		else if (nbMotSup > total * 0.6) {
+			TriesHybrides newP = sup;
+			this.sup = sup.inf;
+			newP.inf = this.equilibrer();
+			return newP;
+		}
+		return this;
 	}
 	
 	public boolean estVide() {

@@ -16,14 +16,19 @@ public class Main {
 	public final static String test4 = "test tester test table test testation testationner";
 	
 	public static void main(String[] args) {
-//		testHybride();
-		testPatricia();
+		testHybride();
+//		testPatricia();
 	}
 	
 	public static void testHybride() {
 		Trie hybride = new TriesHybrides();
 		hybride = (TriesHybrides) ajoutPhrase(hybride, exempleDeBase);
 
+		System.out.println(hybride.profondeurMoyenne());
+		System.out.println("\n\n\n");
+		hybride = ((TriesHybrides) hybride).equilibrer();
+		System.out.println(hybride.profondeurMoyenne());
+		
 		System.out.println(hybride);
 		System.out.println("Contient professeur : " + hybride.recherche("professeur"));
 		System.out.println("Contient dactylographie : " + hybride.recherche("dactylographie"));
@@ -54,7 +59,6 @@ public class Main {
 		
 		TriesVisualisation.displayTrie(hybride);
 		
-		
 //		hybride.ajouterMot("ecrire");
 //		hybride.ajouterMot("appeler");
 //		hybride.ajouterMot("tester");
@@ -63,7 +67,6 @@ public class Main {
 //		System.out.println(hybride);
 //		hybride.ajouterMot("testeurs");
 //		System.out.println(hybride);
-	
 	}
 	
 	

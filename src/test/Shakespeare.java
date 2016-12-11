@@ -18,7 +18,7 @@ public class Shakespeare {
 	
 	public final static boolean VISUALIZE = false;
 	public final static boolean HYBRIDE = true;
-	public final static boolean PATRICIA = false;
+	public final static boolean PATRICIA = true;
 	public final static boolean FUSION = false;
 	
 	public final static boolean BENCH = false;
@@ -62,7 +62,12 @@ public class Shakespeare {
 			insertTrie(hybride, data);
 			statsTrie(hybride);
 			
-			System.out.println("prefix of the : " + hybride.prefixe("g"));
+			System.out.println();
+			System.out.println("Profondeur moyenne avant equilibrage = " + hybride.profondeurMoyenne());
+			hybride = hybride.equilibrer();
+			System.out.println("Profondeur moyenne apres equilibrage = " + hybride.profondeurMoyenne());
+			
+			System.out.println("g is prefix of : " + hybride.prefixe("g") + " words");
 			
 			
 			if (BENCH) {
@@ -84,7 +89,7 @@ public class Shakespeare {
 			insertTrie(patricia, data);
 			statsTrie(patricia);
 			
-			System.out.println("prefix of the : " + patricia.prefixe("g"));
+			System.out.println("g is prefix of : " + patricia.prefixe("g") + " words");
 			
 			if (FUSION)
 				testFusionPatricia(wordList);
