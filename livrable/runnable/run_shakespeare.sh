@@ -1,3 +1,3 @@
 # !/bin/bash
 
-java -jar shakespeareTest.jar shakespeare 
+java -jar shakespeareTest.jar shakespeare

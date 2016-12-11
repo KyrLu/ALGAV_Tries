@@ -14,7 +14,8 @@ import tries.TriesHybrides;
 
 public class Shakespeare {
 //	private final static String DIRECTORY_PATH = "/home/alexandre/git/ALGAV_Tries/test-data/shakespeare";
-	private final static String DIRECTORY_PATH = "test-data\\shakespeare";
+//	private final static String DIRECTORY_PATH = "test-data\\shakespeare";
+	private static String DIRECTORY_PATH;
 	
 	public final static boolean VISUALIZE = false;
 	public final static boolean HYBRIDE = true;
@@ -339,7 +340,9 @@ public class Shakespeare {
 	}
 	
 	public static void main(String[] args) {
+		DIRECTORY_PATH = args[0];
 		launchShakespearTest();
+		while(true);
 	}
 	
 }
