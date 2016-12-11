@@ -498,5 +498,64 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 	public int compareTo(PatriciaTries o) {
 		return subWord.compareTo(o.subWord);
 	}
+	
+	public static PatriciaTries fromHybride(TriesHybrides h) {
+		PatriciaTries result = new PatriciaTries();
+		
+		if (h.getInf() != null) {
+			result.tries.add(fromHybrideIntern(h.getInf()));
+		}
+		
+		if (h.getEq() != null) {
+			result.tries.add(fromHybrideIntern(h));
+		}
+		
+		if (h.getSup() != null) {
+			result.tries.add(fromHybrideIntern(h.getSup()));
+		}
+		
+		
+		return result;
+	}
+	
+	private static PatriciaTries fromHybrideIntern(TriesHybrides h) {
+		PatriciaTries result = new PatriciaTries();
+		result.subWord = h.getCaractere() + "";
+		
+		TriesHybrides crtH = h.getEq();
+		
+		
+		while(crtH != null && crtH.getValeur() == null && crtH.getInf() == null && crtH.getSup() == null && crtH.getEq() != null) {
+			result.subWord += crtH.getCaractere();
+			crtH = crtH.getEq();
+		}
+			
+		if (crtH == null)
+			return result;
+		
+		if (crtH.getInf() != null) {
+			result.tries.add(fromHybrideIntern(crtH.getInf()));
+		}
+		
+		if (crtH.getEq() != null) {
+			result.tries.add(fromHybrideIntern(crtH));
+		}
+		
+		if (crtH.getSup() != null) {
+			result.tries.add(fromHybrideIntern(crtH.getSup()));
+		}
+		
+		if (crtH.getValeur() != null && !result.isFinal()) {
+			if (result.tries.size() != 0) {
+				result.tries.add(result.getEmptyFinal());
+			} else {
+				result.isFinal = true;
+			}
+			result.subWord += crtH.getCaractere();
+		}
+		
+		return result;
+	}
+	
 }
 
