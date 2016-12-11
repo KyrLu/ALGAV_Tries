@@ -98,7 +98,7 @@ public class TriesHybrides implements Trie {
 					return this;
 				else {
 					eq = (TriesHybrides) eq.suppression(mot.substring(1));
-					if (eq == null && sup == null && inf == null)
+					if (eq == null && sup == null && inf == null && valeur == null)
 						return null;
 					else
 						return this;
@@ -110,7 +110,7 @@ public class TriesHybrides implements Trie {
 				return this;
 			else {
 				inf = (TriesHybrides) inf.suppression(mot);
-				if (inf == null && eq == null && sup == null)
+				if (inf == null && eq == null && sup == null && valeur == null)
 					return null;
 				else
 					return this;
@@ -121,7 +121,7 @@ public class TriesHybrides implements Trie {
 				return this;
 			else {
 				sup = (TriesHybrides) sup.suppression(mot);
-				if (sup == null && eq == null && inf == null)
+				if (sup == null && eq == null && inf == null && valeur == null)
 					return null;
 				else
 					return this;
@@ -295,7 +295,7 @@ public class TriesHybrides implements Trie {
 	@Override
 	public Trie ajouterMot(String mot) {
 		id++;
-		return ajouterMot(mot.toLowerCase(), id);
+		return ajouterMot(mot, id);
 	}
 	
 	@Override
@@ -336,38 +336,6 @@ public class TriesHybrides implements Trie {
 				caractereEq = caractere;
 			else
 				caractereEq = listeMots[listeMots.length / 2].charAt(0);
-//			int indexEqDebut = -1;
-//			int indexSupDebut = -1;
-//			if (! this.estVide()) {
-//				caractereEq = caractere;
-//				int i = 0;
-//				while (i < listeMots.length && listeMots[i].charAt(0) < caractere)
-//					i++;
-//				if (listeMots[i].charAt(0) != caractereEq)
-//					indexSupDebut = i;
-//				else {
-//					if (i < listeMots.length) {
-//						indexEqDebut = i;
-//						while (i < listeMots.length && listeMots[i].charAt(0) == caractere)
-//							i++;
-//						if (i != listeMots.length)
-//							indexSupDebut = i;
-//					}
-//				}
-//			}
-//			else {
-//				caractereEq = listeMots[listeMots.length / 2].charAt(0);
-//				int i = listeMots.length / 2;
-//				while (i > 0 && listeMots[i].charAt(0) == caractere)
-//					i--;
-//				if (i > 0)
-//					indexEqDebut = i;
-//				i = listeMots.length / 2;
-//				while (i < listeMots.length && listeMots[i].charAt(0) == caractere)
-//					i++;
-//				if (i != listeMots.length)
-//					indexSupDebut = i;
-//			}
 			if (inf == null)
 				inf = new TriesHybrides();
 			if (sup == null)
