@@ -17,17 +17,14 @@ public class Main {
 	
 	public static void main(String[] args) {
 		testHybride();
-//		testPatricia();
+		testPatricia();
 	}
 	
 	public static void testHybride() {
+		System.out.println("Hybride");
 		Trie hybride = new TriesHybrides();
 		hybride = (TriesHybrides) ajoutPhrase(hybride, exempleDeBase);
 
-		System.out.println(hybride.profondeurMoyenne());
-		System.out.println("\n\n\n");
-		hybride = ((TriesHybrides) hybride).equilibrer();
-		System.out.println(hybride.profondeurMoyenne());
 		
 		System.out.println(hybride);
 		System.out.println("Contient professeur : " + hybride.recherche("professeur"));
@@ -58,6 +55,10 @@ public class Main {
 		System.out.println(hybride.prefixe("de"));
 		
 		TriesVisualisation.displayTrie(hybride);
+
+		System.out.println("Profondeur moyenne avant equilibrage = " + hybride.profondeurMoyenne());
+		hybride = ((TriesHybrides) hybride).equilibrer();
+		System.out.println("Profondeur moyenne apres equilibrage = " + hybride.profondeurMoyenne());
 		
 //		hybride.ajouterMot("ecrire");
 //		hybride.ajouterMot("appeler");
@@ -71,6 +72,7 @@ public class Main {
 	
 	
 	public static void testPatricia() {
+		System.out.println("Patricia");
 		PatriciaTries patricia = new PatriciaTries();
 		patricia = (PatriciaTries) ajoutPhrase(patricia, exempleDeBase);
 //		patricia = (PatriciaTries) ajoutPhrase(patricia, test1);
@@ -96,13 +98,13 @@ public class Main {
 		afficherListMots(patricia.listeMots());
 		
 		
-//		System.out.println(patricia);
-//		System.out.println("Hauteur : " + patricia.hauteur());
-//		System.out.println("profondeur moyenne : " + patricia.profondeurMoyenne());
-//		System.out.println("Nombre de mots : " + patricia.comptageMot());
-//		afficherListMots(patricia.listeMots());
+		System.out.println(patricia);
+		System.out.println("Hauteur : " + patricia.hauteur());
+		System.out.println("profondeur moyenne : " + patricia.profondeurMoyenne());
+		System.out.println("Nombre de mots : " + patricia.comptageMot());
+		afficherListMots(patricia.listeMots());
 
-//		System.out.println("Nils : " + patricia.comptageNil());
+		System.out.println("Nils : " + patricia.comptageNil());
 		TriesVisualisation.displayTrie(patricia);
 	
 		
