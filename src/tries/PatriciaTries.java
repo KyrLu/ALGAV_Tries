@@ -5,9 +5,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
-	private String subWord;				// subWord de ce PATRICIATries. Si il finit par ETX, fin du mot (et le tries devrait etre vide)
-	private TreeSet<PatriciaTries> tries;		// liste des sous-arbres. Taille de 256 (255 caractere + ETX)
-	private boolean isFinal;
+	private String subWord;					// subWord de ce PATRICIATries.
+	private TreeSet<PatriciaTries> tries;	// liste des sous-arbres.
+	private boolean isFinal;				// indicateur de fin de mot.
 
 	public PatriciaTries(String subWord, TreeSet<PatriciaTries> tries) {
 		this.subWord = subWord;
@@ -27,11 +27,14 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 		return subWord.startsWith(subWord);
 	}
 
-
+	/**
+	 * Ajoute un mot.
+	 */
 	public PatriciaTries ajouterMot(String word) {	
 		PatriciaTries candidate = null;
 		String commonPrefix = "";
 
+		//Cherche un prefix en commun.
 		for (PatriciaTries pt : tries) {
 			commonPrefix = pt.getPrefixInCommon(word);
 			if (!commonPrefix.equals("")) {
@@ -40,7 +43,8 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 			}
 		}
 
-		if (candidate == null) { //Pas de prefix parmis tout les candidats
+		//Pas de prefix parmis tout les candidats
+		if (candidate == null) { 
 			PatriciaTries pt = new PatriciaTries(word);
 			pt.isFinal = true;
 			tries.add(pt);
@@ -51,7 +55,8 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 		int candidateLength = candidate.subWord.length();
 		int wordLength = word.length(); 
 		int commonPrefixLength = commonPrefix.length();
-
+		
+		//Le mot est present mais peut etre pas final.
 		if (word.equals(candidate.subWord)) {
 			if (!candidate.isFinal()) {
 				if (!candidate.isFinal && !candidate.hasEmptyFinal()) {
@@ -122,7 +127,9 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 		return result;
 	}
 
-
+	/**
+	 * Supprime un mot.
+	 */
 	public PatriciaTries suppression(String word) {
 		String commonPrefix = "";
 		PatriciaTries candidate = null;
@@ -141,7 +148,7 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 		else if (commonPrefix.length() < candidate.subWord.length())
 			return this;
 
-
+		//Le candidat est le mot à supprimer
 		if (commonPrefix.length() == candidate.subWord.length() && commonPrefix.length() == word.length()) {
 
 			if (candidate.removeEmptyFinal()) {
@@ -166,6 +173,9 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 		return this;
 	}
 
+	/**
+	 * Recherche un mot.
+	 */
 	public boolean recherche(String word) {
 		String commonPrefix;
 
@@ -329,13 +339,22 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 		}
 		return result;
 	}
-
+	/**
+	 * Fusionne 2 arbres.
+	 * @param toFusion
+	 * 	Arbre à fusionner.
+	 * @return
+	 * 	Fusion des deux arbres.
+	 * 
+	 * XXX cette méthode est buguée. Je pense que certains noeuds final ne sont pas fusionné correectement, mais lequels...
+	 */
 	public PatriciaTries fusion(PatriciaTries toFusion) {
-		//		if (this.subWord.equals(toFusion.subWord) && this.tries.size() == 0 && toFusion.tries.size() == 0)
-		//			return this;
-
+		if (this.subWord.equals(toFusion.subWord) && this.tries.size() == 0 && toFusion.tries.size() == 0)
+			return this;
 
 		String commonPrefix;
+		
+		@SuppressWarnings("unchecked")
 		TreeSet<PatriciaTries> noConflict = (TreeSet<PatriciaTries>) toFusion.tries.clone();
 
 		for (PatriciaTries ptSrc : tries) {
@@ -346,21 +365,18 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 				int ptSrcLength = ptSrc.subWord.length();
 				int ptLength = pt.subWord.length();
 
-
-
 				if (!commonPrefix.equals("")) {
-					//					System.out.println();
-					//					System.out.println(ptSrc.subWord + " and " + pt.subWord + " are being merged.");
-
-
+//					System.out.println();
+//					System.out.println(ptSrc.subWord + " and " + pt.subWord + " are being merged.");
 					noConflict.remove(pt);
+					
 					if (commonPrefixLength == ptSrcLength && commonPrefixLength == ptLength) {
-						//						System.out.println("Cas #1");
-						//						System.out.println(ptSrc.tries.size());
-						//						System.out.println(pt.tries.size());
+//						System.out.println("Cas #1");
+//						System.out.println(ptSrc.tries.size());
+//						System.out.println(pt.tries.size());
 						ptSrc.fusion(pt);
 					} else if (commonPrefixLength < ptSrcLength && commonPrefixLength < ptLength) { // test + tete
-						//						System.out.println("Cas #2");
+//						System.out.println("Cas #2");
 						PatriciaTries newPt = new PatriciaTries(commonPrefix);
 
 						ptSrc.subWord = ptSrc.subWord.substring(commonPrefixLength);
@@ -369,15 +385,14 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 						newPt.tries.add(pt);
 						newPt.tries.add(ptSrc);
 					} else if (commonPrefixLength == ptSrcLength && commonPrefixLength < ptLength) { // test + tester
-						//						System.out.println("Cas #3");
+//						System.out.println("Cas #3");
 						pt.subWord = pt.subWord.substring(commonPrefixLength);
 						ptSrc.tries.add(pt);
 
 					} else if (commonPrefixLength == ptLength && commonPrefixLength < ptSrcLength) { // tester + test
-						//						System.out.println("Cas #4");
-
-						System.out.println(ptSrc);
-						System.out.println(pt);
+//						System.out.println("Cas #4");
+//						System.out.println(ptSrc);
+//						System.out.println(pt);
 
 						PatriciaTries newPt = new PatriciaTries(ptSrc.subWord.substring(commonPrefixLength));
 						newPt.isFinal = ptSrc.isFinal;
@@ -393,7 +408,7 @@ public class PatriciaTries implements Trie, Comparable<PatriciaTries> {
 					}
 
 				} else {
-					//					System.out.println("No conflict for " + ptSrc.subWord + " and " + pt.subWord + ".");
+//					System.out.println("No conflict for " + ptSrc.subWord + " and " + pt.subWord + ".");
 				}
 			}
 		}
